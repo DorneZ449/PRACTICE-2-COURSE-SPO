@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0A0B22">
+    <meta name="description" content="PassGen Pro — secure password generator with FastAPI + SQLite. Strength meter, copy to clipboard, history.">
+    <title>{% block title %}PassGen Pro{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/style.css') }}">
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', path='/img/favicon.svg') }}">
+</head>
+<body class="page page--{% block body_modifier %}home{% endblock %}">
+    {% block body %}{% endblock %}
+    <div class="toast" id="toast" role="status" aria-live="polite">
+        <span class="toast-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>
+        </span>
+        <span id="toastMessage">Password copied</span>
+    </div>
+</body>
+</html>
