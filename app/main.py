@@ -1,4 +1,4 @@
-"""PassGen — FastAPI приложение (каркас + базовая генерация)."""
+"""PassGen — FastAPI: каркас + генерация + оценка надёжности."""
 from __future__ import annotations
 
 from fastapi import FastAPI, HTTPException, status
@@ -13,11 +13,12 @@ from .generator import (
     generate_password,
     type_summary,
 )
+from .strength import check_strength
 
 app = FastAPI(
     title="PassGen",
     version=__version__,
-    description="Генератор паролей. Каркас + базовая генерация.",
+    description="Генератор паролей с оценкой надёжности (REST API).",
 )
 
 
@@ -27,9 +28,10 @@ async def index() -> str:
         "<!doctype html><html lang='ru'><head><meta charset='utf-8'>"
         "<title>PassGen</title></head><body>"
         "<h1>PassGen</h1>"
-        "<p>Генератор паролей. UI скоро появится. Пока работает только REST API.</p>"
+        "<p>UI ещё не готов. REST API уже работает:</p>"
         "<ul>"
-        "<li><code>POST /api/generate</code> — сгенерировать пароль (JSON)</li>"
+        "<li><code>POST /api/generate</code> — пароль + оценка надёжности</li>"
+        "<li><code>POST /api/check</code> — оценка переданного пароля</li>"
         "<li><code>GET /api/health</code> — проверка статуса</li>"
         "</ul>"
         f"<p><small>v{__version__}</small></p>"
@@ -55,12 +57,19 @@ def api_generate(
         )
     except GeneratorError as exc:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc))
+    strength = check_strength(password)
     return {
         "password": password,
         "length": length,
         "type_summary": type_summary(use_lowercase, use_uppercase, use_digits, use_symbols),
+        "strength": strength.to_dict(),
         "limits": {"min_length": MIN_LENGTH, "max_length": MAX_LENGTH},
     }
+
+
+@app.post("/api/check", tags=["api"])
+def api_check(password: str) -> dict:
+    return check_strength(password).to_dict()
 
 
 @app.get("/api/health", tags=["api"])
