@@ -1,8 +1,8 @@
 # PassGen Pro — Secure Password Generator
 
-> Web-приложение для генерации надёжных паролей: **FastAPI + SQLite + HTML/CSS/JS** + **Figma-плагин** для дизайн-макета.
+> Web-приложение для генерации надёжных паролей: **FastAPI + SQLite + HTML/CSS/JS** + **Figma** для дизайн-макета.
 >
-> Учебная практика: «Разработка программного решения "Генератор паролей"». Один автор выступает в ролях аналитика, дизайнера, frontend- и backend-разработчика.
+> Учебная практика: «Разработка программного решения "Генератор паролей"».
 
 ![PassGen Pro](docs/cover.png)
 
@@ -30,8 +30,6 @@ passgen-pro/
 │   ├── schemas.py             # Pydantic-модели
 │   ├── templates/             # Jinja2-шаблоны (index, history, _lock)
 │   └── static/                # css / js / img
-├── figma_plugin/              # основной Figma-плагин (design kit + 8 экранов)
-├── figma_plugin_basic/        # запасной упрощённый плагин
 ├── tests/                     # pytest: генератор, силa, REST API
 ├── docs/                      # описание ролей и этапов
 ├── requirements.txt
