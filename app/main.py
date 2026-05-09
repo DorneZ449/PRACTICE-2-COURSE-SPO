@@ -1,46 +1,30 @@
-"""FastAPI-приложение «Генератор паролей»."""
-from pathlib import Path
+"""PassGen — FastAPI приложение (каркас)."""
+from __future__ import annotations
 
-from fastapi import FastAPI, Request, Form
+from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
-from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
 
-from app.generator import generate_password
+from . import __version__
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-
-app = FastAPI(title="Генератор паролей")
-
-app.mount("/static", StaticFiles(directory=BASE_DIR / "static"), name="static")
-templates = Jinja2Templates(directory=BASE_DIR / "templates")
+app = FastAPI(
+    title="PassGen",
+    version=__version__,
+    description="Генератор паролей. Каркас FastAPI приложения.",
+)
 
 
 @app.get("/", response_class=HTMLResponse)
-async def index(request: Request):
-    """Главная страница с формой."""
-    return templates.TemplateResponse(
-        request, "index.html", {"password": ""}
+async def index() -> str:
+    return (
+        "<!doctype html><html lang='ru'><head><meta charset='utf-8'>"
+        "<title>PassGen</title></head><body>"
+        "<h1>PassGen</h1>"
+        "<p>Генератор паролей. Скоро здесь появится форма.</p>"
+        f"<p><small>v{__version__}</small></p>"
+        "</body></html>"
     )
 
 
-@app.post("/", response_class=HTMLResponse)
-async def index_post(
-    request: Request,
-    length: int = Form(12),
-    use_lower: str = Form(None),
-    use_upper: str = Form(None),
-    use_digits: str = Form(None),
-    use_special: str = Form(None),
-):
-    """Сгенерировать пароль и показать его на странице."""
-    password = generate_password(
-        length=length,
-        use_lower=use_lower == "on",
-        use_upper=use_upper == "on",
-        use_digits=use_digits == "on",
-        use_special=use_special == "on",
-    )
-    return templates.TemplateResponse(
-        request, "index.html", {"password": password, "length": length}
-    )
+@app.get("/api/health", tags=["api"])
+def api_health() -> dict:
+    return {"status": "ok", "version": __version__}
