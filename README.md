@@ -1,53 +1,19 @@
-# Генератор паролей
+# PassGen
 
-Учебный проект 2 курс СПО. Веб-приложение для генерации паролей на FastAPI.
-
-## Возможности
-
-- Генерация пароля заданной длины (от 4 до 50 символов)
-- Опции: строчные/заглавные буквы, цифры, спецсимволы
-- Простой и понятный интерфейс
+Учебный проект — генератор паролей на FastAPI.
 
 ## Стек
-
-- Python 3.10+
+- Python 3.11+
 - FastAPI
 - Jinja2
+- SQLite (позже)
 
-## Запуск
-
-1. Установить зависимости:
-
-   ```
-   pip install -r requirements.txt
-   ```
-
-2. Запустить сервер:
-
-   ```
-   uvicorn app.main:app --reload
-   ```
-
-3. Открыть в браузере: http://127.0.0.1:8000
-
-## Структура проекта
-
-```
-password_generator/
-├── app/
-│   ├── __init__.py
-│   ├── main.py         # FastAPI-приложение
-│   └── generator.py    # функция генерации пароля
-├── templates/
-│   └── index.html      # главная страница с формой
-├── static/
-│   └── css/
-│       └── style.css   # стили
-├── requirements.txt
-└── README.md
+## Запуск (черновой вариант)
+```bash
+python -m venv .venv
+source .venv/bin/activate           # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+uvicorn app.main:app --reload
 ```
 
-## Авторы
-
-- Скуратов Дмитрий
-- Скуратов Алексей
+Подробная документация появится по мере развития проекта.
