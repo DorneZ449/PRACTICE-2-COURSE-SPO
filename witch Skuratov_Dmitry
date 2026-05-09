@@ -1,0 +1,56 @@
+*   [33m00a4e5d[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m merge: alexey database ui logic and figma plugin
+[31m|[m[32m\[m  
+[31m|[m * [33m5a0bafe[m[33m ([m[1;31morigin/Skuratov_Alexey[m[33m)[m feat(figma): full screen set (15 frames) + prototype reactions for desktop and mobile
+[31m|[m * [33m0dbdb77[m feat(figma): UI Design Kit plugin — base frames (Cover, Tokens, Components, Strength)
+[31m|[m * [33m77f231d[m feat(history): /history page + REST endpoints (GET / DELETE /api/history)
+[31m|[m * [33m0b3d144[m feat(ui): client-side JS — copy to clipboard, reset, length live update, toast
+[31m|[m * [33mc792893[m feat(db): SQLite history (init_db, save_password, history_count) + Pydantic schemas
+[31m|[m[31m/[m  
+*   [33m8fce436[m merge: dmitry frontend and strength updates
+[33m|[m[34m\[m  
+[33m|[m * [33m626b98b[m[33m ([m[1;31morigin/Skuratov_Dmitry[m[33m, [m[1;32mSkuratov_Dmitry[m[33m)[m style(responsive): mobile breakpoints (max-width 720px / 420px) + reduced-motion
+[33m|[m * [33m67777d1[m style(ui): dark theme — design tokens, layout, components, strength bar
+[33m|[m * [33md9337f0[m feat(ui): base layout — Jinja templates (base.html, index.html, _lock.html) + favicon
+[33m|[m * [33m1885886[m feat(strength): strength evaluator (score 0..7, entropy bits, label, css class)
+[33m|[m[33m/[m  
+*   [33me700252[m Merge pull request #1 from DorneZ449/Skuratov_Alexey
+[35m|[m[36m\[m  
+[35m|[m * [33m9e743e5[m feat(generator): cryptographically secure password generator (secrets) + POST /api/generate
+[35m|[m[35m/[m  
+*   [33m984269a[m merge: commit_02_backend_base
+[1;31m|[m[1;32m\[m  
+[1;31m|[m * [33m0d2fffd[m feat(backend): basic FastAPI skeleton with GET / and /api/health
+[1;31m|[m[1;31m/[m  
+*   [33m74f3063[m merge: commit_01_initial_structure
+[1;33m|[m[1;34m\[m  
+[1;33m|[m * [33m07c4a16[m chore: initial project structure (FastAPI skeleton, requirements, README, .gitignore)
+[1;33m|[m[1;33m/[m  
+* [33mf606219[m Initial commit: password generator MVP
+*   [33m00a4e5d[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mSkuratov_Dmitry[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m merge: alexey database ui logic and figma plugin
+[31m|[m[32m\[m  
+[31m|[m * [33m5a0bafe[m[33m ([m[1;31morigin/Skuratov_Alexey[m[33m)[m feat(figma): full screen set (15 frames) + prototype reactions for desktop and mobile
+[31m|[m * [33m0dbdb77[m feat(figma): UI Design Kit plugin — base frames (Cover, Tokens, Components, Strength)
+[31m|[m * [33m77f231d[m feat(history): /history page + REST endpoints (GET / DELETE /api/history)
+[31m|[m * [33m0b3d144[m feat(ui): client-side JS — copy to clipboard, reset, length live update, toast
+[31m|[m * [33mc792893[m feat(db): SQLite history (init_db, save_password, history_count) + Pydantic schemas
+[31m|[m[31m/[m  
+*   [33m8fce436[m merge: dmitry frontend and strength updates
+[33m|[m[34m\[m  
+[33m|[m * [33m626b98b[m[33m ([m[1;31morigin/Skuratov_Dmitry[m[33m)[m style(responsive): mobile breakpoints (max-width 720px / 420px) + reduced-motion
+[33m|[m * [33m67777d1[m style(ui): dark theme — design tokens, layout, components, strength bar
+[33m|[m * [33md9337f0[m feat(ui): base layout — Jinja templates (base.html, index.html, _lock.html) + favicon
+[33m|[m * [33m1885886[m feat(strength): strength evaluator (score 0..7, entropy bits, label, css class)
+[33m|[m[33m/[m  
+*   [33me700252[m Merge pull request #1 from DorneZ449/Skuratov_Alexey
+[35m|[m[36m\[m  
+[35m|[m * [33m9e743e5[m feat(generator): cryptographically secure password generator (secrets) + POST /api/generate
+[35m|[m[35m/[m  
+*   [33m984269a[m merge: commit_02_backend_base
+[1;31m|[m[1;32m\[m  
+[1;31m|[m * [33m0d2fffd[m feat(backend): basic FastAPI skeleton with GET / and /api/health
+[1;31m|[m[1;31m/[m  
+*   [33m74f3063[m merge: commit_01_initial_structure
+[1;33m|[m[1;34m\[m  
+[1;33m|[m * [33m07c4a16[m chore: initial project structure (FastAPI skeleton, requirements, README, .gitignore)
+[1;33m|[m[1;33m/[m  
+* [33mf606219[m Initial commit: password generator MVP
