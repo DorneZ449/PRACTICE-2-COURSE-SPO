@@ -1,14 +1,11 @@
-"""PassGen — FastAPI: HTML-фронтенд через Jinja-шаблоны."""
+"""PassGen — FastAPI: генерация + надёжность + история в SQLite."""
 from __future__ import annotations
 
 from contextlib import asynccontextmanager
-from pathlib import Path
 from typing import Optional
 
-from fastapi import FastAPI, Form, HTTPException, Request, status
-from fastapi.responses import HTMLResponse, RedirectResponse
-from fastapi.staticfiles import StaticFiles
-from fastapi.templating import Jinja2Templates
+from fastapi import FastAPI, HTTPException, status
+from fastapi.responses import HTMLResponse
 
 from . import __version__, db
 from .generator import (
@@ -27,10 +24,6 @@ from .schemas import (
 )
 from .strength import check_strength
 
-BASE_DIR = Path(__file__).resolve().parent
-STATIC_DIR = BASE_DIR / "static"
-TEMPLATES_DIR = BASE_DIR / "templates"
-
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -41,97 +34,28 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="PassGen",
     version=__version__,
-    description="Генератор паролей: REST API + UI на Jinja-шаблонах.",
+    description="Генератор паролей с историей в SQLite (REST API).",
     lifespan=lifespan,
 )
 
-app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
-templates = Jinja2Templates(directory=str(TEMPLATES_DIR))
 
-
-def _initial_context(request: Request) -> dict:
-    sample_password = generate_password(length=DEFAULT_LENGTH)
-    strength = check_strength(sample_password)
-    return {
-        "request": request,
-        "version": __version__,
-        "password": sample_password,
-        "length": DEFAULT_LENGTH,
-        "min_length": MIN_LENGTH,
-        "max_length": MAX_LENGTH,
-        "use_lowercase": True,
-        "use_uppercase": True,
-        "use_digits": True,
-        "use_symbols": True,
-        "summary": type_summary(True, True, True, True),
-        "strength": strength,
-        "error": None,
-    }
-
-
-# ---------------------------------------------------------------------------
-# UI (Jinja templates)
-# ---------------------------------------------------------------------------
 @app.get("/", response_class=HTMLResponse)
-async def index(request: Request):
-    return templates.TemplateResponse("index.html", _initial_context(request))
-
-
-@app.post("/generate", response_class=HTMLResponse)
-async def generate_form(
-    request: Request,
-    length: int = Form(DEFAULT_LENGTH),
-    uppercase: Optional[str] = Form(None),
-    lowercase: Optional[str] = Form(None),
-    digits: Optional[str] = Form(None),
-    symbols: Optional[str] = Form(None),
-):
-    use_uppercase = uppercase is not None
-    use_lowercase = lowercase is not None
-    use_digits = digits is not None
-    use_symbols = symbols is not None
-
-    ctx = _initial_context(request)
-    ctx.update(
-        length=length,
-        use_uppercase=use_uppercase,
-        use_lowercase=use_lowercase,
-        use_digits=use_digits,
-        use_symbols=use_symbols,
+async def index() -> str:
+    return (
+        "<!doctype html><html lang='ru'><head><meta charset='utf-8'>"
+        "<title>PassGen</title></head><body>"
+        "<h1>PassGen</h1>"
+        "<p>UI ещё не готов. REST API уже работает:</p>"
+        "<ul>"
+        "<li><code>POST /api/generate</code> — пароль + оценка + сохранение в историю</li>"
+        "<li><code>POST /api/check</code> — оценка переданного пароля</li>"
+        "<li><code>GET /api/health</code> — проверка статуса</li>"
+        "</ul>"
+        f"<p><small>v{__version__}</small></p>"
+        "</body></html>"
     )
-    try:
-        password = generate_password(
-            length=length,
-            use_lowercase=use_lowercase,
-            use_uppercase=use_uppercase,
-            use_digits=use_digits,
-            use_symbols=use_symbols,
-        )
-    except GeneratorError as exc:
-        ctx["error"] = str(exc)
-        return templates.TemplateResponse("index.html", ctx)
-
-    summary = type_summary(use_lowercase, use_uppercase, use_digits, use_symbols)
-    strength = check_strength(password)
-    db.save_password(
-        password=password,
-        length=length,
-        use_lowercase=use_lowercase,
-        use_uppercase=use_uppercase,
-        use_digits=use_digits,
-        use_symbols=use_symbols,
-        type_summary=summary,
-        strength_label=strength.label,
-        strength_score=strength.score,
-        entropy_bits=strength.entropy_bits,
-    )
-    ctx.update(password=password, summary=summary, strength=strength)
-    return templates.TemplateResponse("index.html", ctx)
 
 
-# ---------------------------------------------------------------------------
-# REST API
-# ---------------------------------------------------------------------------
 @app.post("/api/generate", response_model=GenerateResponse, tags=["api"])
 def api_generate(payload: GenerateRequest) -> GenerateResponse:
     try:
