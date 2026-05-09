@@ -1,0 +1,8 @@
+{
+  "name": "PassGen Pro – UI Design Kit",
+  "id": "passgen-pro-ui-design-kit",
+  "api": "1.0.0",
+  "main": "code.js",
+  "editorType": ["figma"],
+  "documentAccess": "dynamic-page"
+}
