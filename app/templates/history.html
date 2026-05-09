@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}PassGen Pro — History{% endblock %}
+{% block body_modifier %}history{% endblock %}
+
+{% block body %}
+<main class="shell shell--wide">
+    <section class="app-card history-card">
+        <header class="topbar history-topbar">
+            <a class="pill pill--surface pill--md" href="/">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+                BACK
+            </a>
+            <div class="history-title">
+                <h1>History</h1>
+                <p>Passwords saved in local SQLite database — {{ count }} record{{ '' if count == 1 else 's' }}</p>
+            </div>
+            <form id="clearForm" action="/history/clear" method="post">
+                <button class="pill pill--danger pill--md" type="submit">CLEAR</button>
+            </form>
+        </header>
+
+        {% if items %}
+            <div class="history-table-wrap">
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>Password</th>
+                            <th>Length</th>
+                            <th>Charsets</th>
+                            <th>Strength</th>
+                            <th>Entropy</th>
+                            <th>Date</th>
+                            <th aria-label="Actions"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in items %}
+                            <tr>
+                                <td>
+                                    <button class="copy-cell" type="button" data-password="{{ item.password }}">
+                                        <code>{{ item.password }}</code>
+                                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                                            <rect x="9" y="3" width="12" height="14" rx="2"/>
+                                            <rect x="3" y="7" width="12" height="14" rx="2"/>
+                                        </svg>
+                                    </button>
+                                </td>
+                                <td>{{ item.length }}</td>
+                                <td class="muted">{{ item.type_summary }}</td>
+                                <td>
+                                    {% set cls = item.strength_label|lower|replace(' ', '-') %}
+                                    <span class="badge badge--{{ cls }}">{{ item.strength_label }}</span>
+                                </td>
+                                <td>{{ '%.1f' % item.entropy_bits }} bits</td>
+                                <td class="muted">{{ item.created_at }}</td>
+                                <td><button class="row-delete" type="button" data-id="{{ item.id }}" aria-label="Delete">×</button></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <section class="empty">
+                <div class="empty__icon">
+                    {% include "_lock.html" %}
+                </div>
+                <h2>History is empty</h2>
+                <p>Generate the first password and it will appear on this page.</p>
+                <a class="pill pill--primary pill--xl" href="/">GENERATE PASSWORD</a>
+            </section>
+        {% endif %}
+    </section>
+</main>
+<script src="{{ url_for('static', path='/js/history.js') }}"></script>
+{% endblock %}
