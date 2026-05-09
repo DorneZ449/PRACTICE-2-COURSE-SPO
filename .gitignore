@@ -1,23 +1,17 @@
-# Python
 __pycache__/
 *.py[cod]
-*.pyo
-*.pyd
-*.egg-info/
+*.sqlite3
+*.db
 .venv/
 venv/
 env/
-
-# IDE
 .idea/
 .vscode/
-*.swp
-
-# OS
 .DS_Store
-Thumbs.db
-
-# Project
-*.db
-*.sqlite
-*.sqlite3
+.pytest_cache/
+.coverage
+htmlcov/
+node_modules/
+dist/
+build/
+*.egg-info/
