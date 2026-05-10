@@ -15,7 +15,8 @@ CHARSETS: Dict[str, str] = {
 }
 
 MIN_LENGTH = 6
-MAX_LENGTH = 64
+MAX_LENGTH = 64           # hard upper bound accepted by the REST API
+UI_MAX_LENGTH = 32        # slider upper bound in the web UI (per the spec)
 DEFAULT_LENGTH = 16
 
 
@@ -56,17 +57,15 @@ def generate_password(
 
     if not selected:
         raise GeneratorError("Select at least one character type.")
-    if length < len(selected):
-        raise GeneratorError(
-            "Password length is too short for the selected options."
-        )
 
-    rng = secrets.SystemRandom()
+    # Guarantee at least one char from every selected category, then fill the
+    # rest from the union of the selected sets and shuffle the result so the
+    # mandatory chars do not leak their position.
     chars = [secrets.choice(charset) for charset in selected]
     union = "".join(selected)
     while len(chars) < length:
         chars.append(secrets.choice(union))
-    rng.shuffle(chars)
+    secrets.SystemRandom().shuffle(chars)
     return "".join(chars)
 
 

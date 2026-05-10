@@ -5,7 +5,7 @@
 {% block body %}
 <main class="shell">
     <section class="app-card" aria-label="PassGen password generator"
-             data-min="{{ min_length }}" data-max="{{ max_length }}">
+             data-min="{{ min_length }}" data-max="{{ ui_max_length }}">
         <header class="topbar">
             <a href="/" class="brand" aria-label="PassGen Pro home">
                 {% include "_lock.html" %}
@@ -15,7 +15,7 @@
                 </span>
             </a>
             <nav class="top-actions" aria-label="Top actions">
-                <a class="pill pill--ghost" href="/api/health" target="_blank" rel="noreferrer noopener">API</a>
+                <a class="pill pill--ghost" href="/docs" target="_blank" rel="noreferrer noopener">API</a>
                 <a class="pill pill--surface" href="/history">
                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5a7 7 0 1 1-6.32 4H3l3.2-3.2L9.4 9H7.76A5 5 0 1 0 12 7v5l4 2"/></svg>
                     History
@@ -40,7 +40,7 @@
         <section id="strengthLine" class="strength strength--{{ strength.css_class }}"
                  data-percent="{{ strength.percent }}"
                  aria-label="Password strength">
-            <span class="strength__dot">i</span>
+            <span class="strength__dot" aria-hidden="true"></span>
             <div class="strength__body">
                 <strong id="strengthLabel">{{ strength.label }}</strong>
                 <p id="strengthDesc">{{ strength.description }}</p>
@@ -64,10 +64,10 @@
                     </button>
                 </div>
                 <input id="lengthRange" class="range" type="range" name="length"
-                       min="{{ min_length }}" max="{{ max_length }}" value="{{ length }}">
+                       min="{{ min_length }}" max="{{ ui_max_length }}" value="{{ length }}">
                 <div class="range-limits">
                     <span>{{ min_length }}</span>
-                    <span>{{ max_length }}</span>
+                    <span>{{ ui_max_length }}</span>
                 </div>
             </div>
 

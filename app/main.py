@@ -6,8 +6,8 @@ from contextlib import asynccontextmanager
 from pathlib import Path
 from typing import Optional
 
-from fastapi import Depends, FastAPI, Form, HTTPException, Request, status
-from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
+from fastapi import FastAPI, Form, HTTPException, Request, status
+from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
@@ -16,6 +16,7 @@ from .generator import (
     DEFAULT_LENGTH,
     MAX_LENGTH,
     MIN_LENGTH,
+    UI_MAX_LENGTH,
     GeneratorError,
     generate_password,
     type_summary,
@@ -70,6 +71,7 @@ def _initial_context(request: Request) -> dict:
         "length": DEFAULT_LENGTH,
         "min_length": MIN_LENGTH,
         "max_length": MAX_LENGTH,
+        "ui_max_length": UI_MAX_LENGTH,
         "use_lowercase": True,
         "use_uppercase": True,
         "use_digits": True,

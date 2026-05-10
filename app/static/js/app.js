@@ -6,7 +6,7 @@
 
   const card = $('.app-card');
   const minLen = Number(card?.dataset.min || 6);
-  const maxLen = Number(card?.dataset.max || 64);
+  const maxLen = Number(card?.dataset.max || 32);
 
   const form         = $('#genForm');
   const lengthRange  = $('#lengthRange');

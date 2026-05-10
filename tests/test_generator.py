@@ -59,7 +59,8 @@ def test_at_least_one_class_required():
         )
 
 
-def test_length_too_short_for_classes():
+def test_length_below_minimum_raises():
+    """Any length below MIN_LENGTH must be rejected."""
     with pytest.raises(GeneratorError):
         generate_password(length=2)
 
