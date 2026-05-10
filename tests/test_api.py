@@ -14,14 +14,17 @@ def test_generate_default(client):
 
 
 def test_generate_custom(client):
-    res = client.post("/api/generate", json={
-        "length": 24,
-        "use_lowercase": True,
-        "use_uppercase": False,
-        "use_digits": True,
-        "use_symbols": False,
-        "save": False,
-    })
+    res = client.post(
+        "/api/generate",
+        json={
+            "length": 24,
+            "use_lowercase": True,
+            "use_uppercase": False,
+            "use_digits": True,
+            "use_symbols": False,
+            "save": False,
+        },
+    )
     assert res.status_code == 200
     body = res.json()
     assert len(body["password"]) == 24
@@ -35,13 +38,16 @@ def test_generate_validation_error(client):
 
 
 def test_generate_at_least_one_class(client):
-    res = client.post("/api/generate", json={
-        "length": 12,
-        "use_lowercase": False,
-        "use_uppercase": False,
-        "use_digits": False,
-        "use_symbols": False,
-    })
+    res = client.post(
+        "/api/generate",
+        json={
+            "length": 12,
+            "use_lowercase": False,
+            "use_uppercase": False,
+            "use_digits": False,
+            "use_symbols": False,
+        },
+    )
     assert res.status_code == 400
 
 

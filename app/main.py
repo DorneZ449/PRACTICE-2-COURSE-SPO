@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from contextlib import asynccontextmanager
 from pathlib import Path
-from typing import Optional
 
 from fastapi import FastAPI, Form, HTTPException, Request, status
 from fastapi.responses import HTMLResponse, RedirectResponse
@@ -96,7 +95,7 @@ def api_generate(payload: GenerateRequest) -> GenerateResponse:
             use_symbols=payload.use_symbols,
         )
     except GeneratorError as exc:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc))
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
 
     strength = check_strength(password)
     summary = type_summary(
@@ -106,7 +105,7 @@ def api_generate(payload: GenerateRequest) -> GenerateResponse:
         payload.use_symbols,
     )
 
-    saved_id: Optional[int] = None
+    saved_id: int | None = None
     if payload.save:
         saved_id = db.save_password(
             password=password,
@@ -142,13 +141,21 @@ def api_history(limit: int = 50, offset: int = 0) -> HistoryResponse:
     items = db.get_history(limit=limit, offset=offset)
     return HistoryResponse(
         total=db.history_count(),
-        items=[HistoryItem(**{**i, **{
-            "use_lowercase": bool(i["use_lowercase"]),
-            "use_uppercase": bool(i["use_uppercase"]),
-            "use_digits": bool(i["use_digits"]),
-            "use_symbols": bool(i["use_symbols"]),
-            "entropy_bits": float(i.get("entropy_bits") or 0.0),
-        }}) for i in items],
+        items=[
+            HistoryItem(
+                **{
+                    **i,
+                    **{
+                        "use_lowercase": bool(i["use_lowercase"]),
+                        "use_uppercase": bool(i["use_uppercase"]),
+                        "use_digits": bool(i["use_digits"]),
+                        "use_symbols": bool(i["use_symbols"]),
+                        "entropy_bits": float(i.get("entropy_bits") or 0.0),
+                    },
+                }
+            )
+            for i in items
+        ],
     )
 
 
@@ -183,10 +190,10 @@ def index(request: Request):
 def generate_form(
     request: Request,
     length: int = Form(DEFAULT_LENGTH),
-    lowercase: Optional[str] = Form(None),
-    uppercase: Optional[str] = Form(None),
-    digits: Optional[str] = Form(None),
-    symbols: Optional[str] = Form(None),
+    lowercase: str | None = Form(None),
+    uppercase: str | None = Form(None),
+    digits: str | None = Form(None),
+    symbols: str | None = Form(None),
 ):
     """SSR fallback for users with JS disabled."""
     use_lower = lowercase == "on"

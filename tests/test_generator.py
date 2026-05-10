@@ -3,9 +3,9 @@ import string
 import pytest
 
 from app.generator import (
-    GeneratorError,
     MAX_LENGTH,
     MIN_LENGTH,
+    GeneratorError,
     generate_password,
     type_summary,
 )
