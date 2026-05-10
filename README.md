@@ -1,8 +1,21 @@
+<div align="center">
+
+# PassGen Pro — Secure Password Generator
+
+**FastAPI-приложение для генерации надёжных паролей с историей, REST API, адаптивным интерфейсом и Figma-прототипом.**
+
+![Python](https://img.shields.io/badge/Python-3.11%2B-blue)
+![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688)
+![SQLite](https://img.shields.io/badge/SQLite-Database-003B57)
+![Tests](https://img.shields.io/badge/tests-pytest-green)
+![License](https://img.shields.io/badge/license-MIT-yellow)
+
+</div>
 # PassGen Pro — Secure Password Generator
 
 > Web-приложение для генерации надёжных паролей: **FastAPI + SQLite + HTML/CSS/JS** + **Figma-макет** для дизайна и прототипа.
 >
-> Учебная практика, задача № 10 «Разработка программного решения "Генератор паролей"». Проект выполнен учебной командой из двух участников; оценка индивидуальная, поэтому каждый в рамках своей части выступает в ролях аналитика, дизайнера, frontend- и backend-разработчика.
+> Учебная практика, задача № 10 «Разработка программного решения "Генератор паролей"». Каждый в рамках своей части выступает в ролях аналитика, дизайнера, frontend- и backend-разработчика.
 
 ## Авторы
 
@@ -40,7 +53,7 @@ passgen-pro/
 ├── tests/                     # pytest: генератор, силa, REST API
 ├── docs/                      # описание ролей и этапов
 ├── requirements.txt
-└── run.sh / run.bat
+└── run.sh / run.bat           #запуск программы windows/Linux
 ```
 
 ## 🚀 Запуск
@@ -165,4 +178,4 @@ curl -X POST http://127.0.0.1:8000/api/generate \
 на использование ИИ-ассистентов проект не нёс.
 ## 📄 Лицензия
 
-MIT — см. [`LICENSE`](LICENSE).
+MIT — см. [`LICENSE`](LICENSE).                                                                                                                                                         Dmitry Sergeevich © 2026
