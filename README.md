@@ -5,7 +5,7 @@
 **Secure password generator: FastAPI + SQLite + vanilla JS, с REST API, историей, оценкой надёжности и 1:1 Figma-прототипом.**
 
 [![CI](https://github.com/DorneZ449/PRACTICE-2-COURSE-SPO/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/DorneZ449/PRACTICE-2-COURSE-SPO/actions/workflows/tests.yml)
-[![codecov](https://codecov.io/gh/DorneZ449/PRACTICE-2-COURSE-SPO/branch/main/graph/badge.svg)](https://codecov.io/gh/DorneZ449/PRACTICE-2-COURSE-SPO)
+![Coverage](https://img.shields.io/badge/coverage-pytest--cov-6f42c1?logo=pytest&logoColor=white)
 ![Python](https://img.shields.io/badge/python-3.11%2B-3776AB?logo=python&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white)
 ![SQLite](https://img.shields.io/badge/SQLite-003B57?logo=sqlite&logoColor=white)
