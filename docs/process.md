@@ -10,7 +10,7 @@
 | Участник | Основной вклад |
 |----------|----------------|
 | **Скуратов Дмитрий** | Структура проекта, FastAPI base, оценка надёжности, HTML-шаблоны и стили, адаптивность, тесты и документация. |
-| **Скуратов Алексей** | Криптостойкая генерация паролей, SQLite-история, клиентский JavaScript, страница истории, Figma-плагин и prototype-связи. |
+| **Скуратов Алексей** | Криптостойкая генерация паролей, SQLite-история, клиентский JavaScript, страница истории, Figma-макет и prototype-связи. |
 
 ## 1. Проектирование (Аналитик)
 
@@ -45,14 +45,13 @@
 
 ## 2. Дизайн (Дизайнер)
 
-- Дизайн-макет собирается в **Figma** через собственный плагин (`figma_plugin/`):
+- Дизайн-макет и интерактивный прототип живут в общей командной Figma: файл [PassGen Pro](https://www.figma.com/design/1FdC5Nv738sPnKGK3JFo9J/PassGen-Pro).
   - **Design tokens**: палитра (фон, поверхности, акценты, статусы), типографика Inter, радиусы, отступы.
   - **Component library**: кнопки (primary/secondary/danger/ghost/pill), input/output, slider, checkbox, badges, toast.
-  - **Screens** (1440×1024 / 820×1180 / 420×900):
-    - Desktop / Tablet / Mobile · Home — основная генерация.
-    - Desktop · Strength matrix — четыре состояния (Weak → Very Strong).
-    - Desktop · History (filled + empty), Mobile · History.
-  - **Prototype links**: «History» → History, «Back» → Home.
+  - **Экраны** (1440×1024 / 420×900):
+    - Скуратов Дмитрий — «Длина пароля и выбор классов символов»: Desktop Default 16 / 6 / 64 / Только цифры + Mobile Default и Length 64.
+    - Скуратов Алексей — «Копирование в буфер обмена и проверка надёжности»: Desktop Generated, After copy, Strength matrix, History (filled / empty) + Mobile Generated и After copy.
+  - **Prototype links**: GENERATE / COPY / HISTORY / CLEAR / BACK — связывают экраны в единый кликабельный прототип.
 - Цветовая палитра тёмная, акцент — фиолетовый (`#4F2BE6` / `#2F119C`), статусы: success `#22C55E`, warning `#F59E0B`, danger `#EF4444`.
 
 ## 3. Разработка
@@ -91,6 +90,6 @@
 ## 5. Артефакты
 
 - Исходный код (Python, JS, CSS, Jinja2).
-- Figma-плагин (design kit + 9 экранов).
+- Figma-макет и прототип: <https://www.figma.com/design/1FdC5Nv738sPnKGK3JFo9J/PassGen-Pro>.
 - README, docs/process.md.
 - Тесты (`pytest`).
