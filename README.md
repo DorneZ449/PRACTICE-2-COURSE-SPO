@@ -1,49 +1,62 @@
-# PassGen Pro — Secure Password Generator
+<div align="center">
 
-> Web-приложение для генерации надёжных паролей: **FastAPI + SQLite + HTML/CSS/JS** + **Figma-плагин** для дизайн-макета.
->
-> Учебная практика: «Разработка программного решения "Генератор паролей"». Один автор выступает в ролях аналитика, дизайнера, frontend- и backend-разработчика.
+# PassGen Pro
 
-![PassGen Pro](docs/cover.png)
+**Secure password generator: FastAPI + SQLite + vanilla JS, с REST API, историей, оценкой надёжности и 1:1 Figma-прототипом.**
+
+[![CI](https://github.com/DorneZ449/PRACTICE-2-COURSE-SPO/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/DorneZ449/PRACTICE-2-COURSE-SPO/actions/workflows/tests.yml)
+![Coverage](https://img.shields.io/badge/coverage-pytest--cov-6f42c1?logo=pytest&logoColor=white)
+![Python](https://img.shields.io/badge/python-3.11%2B-3776AB?logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white)
+![SQLite](https://img.shields.io/badge/SQLite-003B57?logo=sqlite&logoColor=white)
+![Code style: black](https://img.shields.io/badge/code%20style-black-000000)
+![License](https://img.shields.io/badge/license-MIT-yellow)
+
+[Возможности](#-возможности) ·
+[Стек](#-стек) ·
+[Запуск](#-запуск) ·
+[Тесты](#-тесты-и-качество-кода) ·
+[REST API](#-rest-api) ·
+[Архитектура](#-архитектура) ·
+[Figma](#-figma-макет) ·
+[Авторы](#-авторы) ·
+[Лицензия](#-лицензия)
+
+</div>
+
+---
+
+> Учебная практика, задача № 10 «Разработка программного решения "Генератор паролей"». Каждый участник в своей части совмещает роли аналитика, дизайнера, frontend- и backend-разработчика.
 
 ## ✨ Возможности
 
-- Генерация паролей длиной от 6 до 64 символов (по ТЗ — слайдер 6–32, REST API — до 64).
-- Опции включения букв верхнего/нижнего регистра, цифр, специальных символов.
-- Криптографически стойкая случайность (`secrets.SystemRandom`).
-- Оценка надёжности с уровнями **Weak / Medium / Strong / Very Strong** + расчёт **энтропии в битах**.
-- **Копирование пароля в буфер обмена** одной кнопкой (с тостом-уведомлением).
-- **История** сгенерированных паролей в локальной **SQLite**-базе с возможностью копирования, удаления и очистки.
-- **REST API** (`/api/generate`, `/api/check`, `/api/history`, `/api/health`) с автодокументацией Swagger UI.
+- **Криптогенерация** паролей длиной от 6 до 32 символов в UI (REST API — до 64), на базе `secrets.SystemRandom`.
+- Гибкий выбор классов символов (A–Z / a–z / 0–9 / спецсимволы).
+- **Оценка надёжности** — уровни Weak / Medium / Strong / Very Strong и расчёт энтропии в битах.
+- **Копирование пароля в буфер обмена** одной кнопкой через Clipboard API + тост-уведомление.
+- **История** сгенерированных паролей в локальной SQLite-базе с copy / delete / clear.
+- **REST API** (`/api/generate`, `/api/check`, `/api/history`, `/api/health`) с автодокументацией Swagger UI на `/docs`.
 - Полностью адаптивный интерфейс (Desktop / Tablet / Mobile), 1:1 повторяющий Figma-макет.
-- Все экраны и состояния заранее собраны в **Figma-плагине** (см. `figma_plugin/`).
+- Интерактивный Figma-прототип со связями GENERATE / COPY / HISTORY / CLEAR / BACK.
 
-## 🏗️ Архитектура
+> ⚠️ **Область применения.** Учебный проект. Пароли в истории сохраняются в локальную SQLite в **открытом виде**, REST-эндпоинты не защищены аутентификацией. Не использовать как продакшн password manager.
 
-```
-passgen-pro/
-├── app/                       # FastAPI-приложение
-│   ├── main.py                # точки входа: SSR + REST API
-│   ├── generator.py           # криптогенератор паролей
-│   ├── strength.py            # оценка надёжности и энтропии
-│   ├── db.py                  # SQLite-слой
-│   ├── schemas.py             # Pydantic-модели
-│   ├── templates/             # Jinja2-шаблоны (index, history, _lock)
-│   └── static/                # css / js / img
-├── figma_plugin/              # основной Figma-плагин (design kit + 8 экранов)
-├── figma_plugin_basic/        # запасной упрощённый плагин
-├── tests/                     # pytest: генератор, силa, REST API
-├── docs/                      # описание ролей и этапов
-├── requirements.txt
-└── run.sh / run.bat
-```
+## 🛠 Стек
+
+| Слой | Технологии |
+| --- | --- |
+| **Backend** | FastAPI · Uvicorn · Pydantic v2 |
+| **Хранилище** | SQLite (`sqlite3` stdlib) |
+| **Frontend** | Jinja2 SSR · Vanilla JS · Clipboard API |
+| **Дизайн** | Figma (макет + интерактивный прототип) |
+| **Качество** | pytest · pytest-cov · ruff · black · GitHub Actions · Codecov |
 
 ## 🚀 Запуск
 
 ### Linux / macOS
 
 ```bash
-git clone <repo-url> passgen-pro
+git clone https://github.com/DorneZ449/PRACTICE-2-COURSE-SPO.git passgen-pro
 cd passgen-pro
 ./run.sh
 ```
@@ -51,10 +64,12 @@ cd passgen-pro
 ### Windows
 
 ```bat
-run.bat
+run.bat  - файл в корневой папке проекта
 ```
 
 ### Вручную
+
+Рекомендуемая версия Python — **3.11–3.14** (зависимости в `requirements.txt` указаны с верхней границей по мажорной версии, поэтому актуальные релизы устанавливаются без проблем).
 
 ```bash
 python -m venv .venv
@@ -64,54 +79,36 @@ pip install -r requirements.txt
 uvicorn app.main:app --reload
 ```
 
-Открыть: **http://127.0.0.1:8000**.
-Swagger UI с REST API: **http://127.0.0.1:8000/docs**.
+- UI: <http://127.0.0.1:8000>
+- Swagger UI: <http://127.0.0.1:8000/docs>
 
-## 🧪 Тесты
+## 🧪 Тесты и качество кода
 
 ```bash
 pip install -r requirements-dev.txt
-pytest
+pytest -q --cov=app --cov-report=term-missing
+ruff check .
+black --check .
 ```
 
 В наборе:
+
 - `tests/test_generator.py` — границы длины, наличие нужных классов символов, уникальность.
 - `tests/test_strength.py` — корректность лейблов и энтропии для типичных паролей.
 - `tests/test_api.py` — сквозные REST-сценарии (`/api/generate`, `/api/check`, история).
 
-## 🎨 Figma-макет (плагин)
-
-Дизайн собирается прямо в Figma скриптом-плагином — никаких внешних `.fig`-файлов не требуется.
-
-1. В Figma → **Plugins → Development → Import plugin from manifest…**.
-2. Выберите `figma_plugin/manifest.json` (или `figma_plugin_basic/manifest.json` как запасной вариант).
-3. Запустите плагин **PassGen Pro – UI Design Kit**. Через несколько секунд на холсте появится:
-
-| № | Экран                                       | Размер        |
-|---|---------------------------------------------|---------------|
-| 1 | Cover (обложка)                             | 1440 × 720    |
-| 2 | Design tokens (палитра, типографика)        | 1440 × 720    |
-| 3 | Components (UI library)                     | 1440 × 820    |
-| 4 | Desktop · Home (default — Very Strong)      | 1440 × 1024   |
-| 5 | Desktop · Strength matrix (Weak…VeryStrong) | 1440 × 1024   |
-| 6 | Desktop · History (filled, 5 строк)         | 1440 × 1024   |
-| 7 | Desktop · History (empty)                   | 1440 × 1024   |
-| 8 | Mobile · Home                               | 420 × 900     |
-| 9 | Mobile · History                            | 420 × 900     |
-| 10| Tablet · Home                               | 820 × 1180    |
-
-Plugin также прокладывает прототип-связи: **History** (на любой Home) → **Desktop · History**, **Back** (на History) → **Desktop · Home**.
+CI ([`.github/workflows/tests.yml`](.github/workflows/tests.yml)) гонит `ruff`, `black --check` и `pytest` на Python 3.11 и 3.12, а покрытие отправляет в Codecov — статус виден в бейджах сверху.
 
 ## 🌐 REST API
 
-| Метод   | Путь                        | Описание                             |
-|---------|-----------------------------|--------------------------------------|
-| `POST`  | `/api/generate`             | Сгенерировать пароль (+ сохранить)   |
+| Метод   | Путь                        | Описание                               |
+|---------|-----------------------------|----------------------------------------|
+| `POST`  | `/api/generate`             | Сгенерировать пароль (+ сохранить)     |
 | `POST`  | `/api/check`                | Оценить надёжность произвольной строки |
-| `GET`   | `/api/history?limit&offset` | История сгенерированных паролей      |
-| `DELETE`| `/api/history`              | Полностью очистить историю           |
-| `DELETE`| `/api/history/{id}`         | Удалить одну запись                  |
-| `GET`   | `/api/health`               | Health-check (`{"status":"ok"}`)     |
+| `GET`   | `/api/history?limit&offset` | История сгенерированных паролей        |
+| `DELETE`| `/api/history`              | Полностью очистить историю             |
+| `DELETE`| `/api/history/{id}`         | Удалить одну запись                    |
+| `GET`   | `/api/health`               | Health-check (`{"status":"ok"}`)       |
 
 Пример:
 
@@ -139,10 +136,65 @@ curl -X POST http://127.0.0.1:8000/api/generate \
 }
 ```
 
-## 🧭 Этапы разработки и роли
+## 🏗 Архитектура
 
-См. [`docs/process.md`](docs/process.md): полная карта этапов **Проектирование → Разработка → Тестирование** и совмещённые роли (аналитик, дизайнер, frontend-, backend-разработчик).
+```
+passgen-pro/
+├── app/                       # FastAPI-приложение
+│   ├── main.py                # точки входа: SSR + REST API
+│   ├── generator.py           # криптогенератор паролей
+│   ├── strength.py            # оценка надёжности и энтропии
+│   ├── db.py                  # SQLite-слой
+│   ├── schemas.py             # Pydantic-модели
+│   ├── templates/             # Jinja2-шаблоны (index, history, _lock)
+│   └── static/                # css / js / img
+├── tests/                     # pytest: генератор, надёжность, REST API
+├── docs/                      # описание ролей и этапов
+├── .github/workflows/         # GitHub Actions: ruff + black + pytest + Codecov
+├── pyproject.toml             # конфиг ruff / black
+├── requirements.txt           # рантайм-зависимости
+├── requirements-dev.txt       # dev-зависимости (pytest, pytest-cov, ruff, black)
+└── run.sh / run.bat           # запуск программы Linux / Windows
+```
+
+## 🎨 Figma-макет
+
+Дизайн и интерактивный прототип проекта живут в одном Figma-файле:
+
+**[PassGen Pro · Figma](https://www.figma.com/design/1FdC5Nv738sPnKGK3JFo9J/PassGen-Pro)**
+
+В файле собраны:
+
+- Cover, Design tokens (палитра, типографика, радиусы, отступы) и Components (UI-библиотека).
+- Раздел **«Длина пароля и выбор классов символов»** (Скуратов Дмитрий) — desktop-экраны Default 16 / 6 / 64 / Только цифры + mobile-экраны Default и Length 64.
+- Раздел **«Копирование в буфер обмена и проверка надёжности»** (Скуратов Алексей) — desktop-экраны Generated, After copy, Strength matrix, History (filled / empty) + mobile-экраны Generated и After copy.
+- Прототип-связи между экранами (GENERATE / COPY / HISTORY / CLEAR / BACK).
+
+## 👥 Авторы
+
+| Участник | Основные модули и вклад |
+|----------|--------------------------|
+| **Скуратов Дмитрий** | Структура проекта, скелет FastAPI-приложения, оценка надёжности (`app/strength.py`), базовые HTML-шаблоны и CSS, адаптивные медиазапросы, набор автотестов и финальная документация. |
+| **Скуратов Алексей** | Криптостойкий генератор (`app/generator.py`), слой SQLite (`app/db.py`, `app/schemas.py`), клиентский JavaScript (Clipboard API, тосты, слайдер), страница истории и Figma-прототип. |
+
+Работа велась через GitHub в ветках `Skuratov_Dmitry` и `Skuratov_Alexey`, объединённых в `main`.
+
+Полная карта этапов **Проектирование → Разработка → Тестирование** и совмещённые роли (аналитик, дизайнер, frontend-, backend-разработчик) — в [`docs/process.md`](docs/process.md).
+
+## 🤖 Помощь ИИ-ассистента
+
+При разработке проекта использовалась связка ИИ-инструментов:
+
+- **Claude Opus 4.8 (Anthropic)** — новейшая флагманская модель Anthropic, вышедшая совсем недавно и пришедшая на смену линейке Opus 4.7. Развивает сильные стороны предшественника в программировании и длинных агентских задачах: точнее удерживает контекст большого репозитория, аккуратнее проводит рефакторинг и код-ревью, увереннее доводит многошаговые задачи до конца с меньшим числом итераций. На финальном этапе привлекалась к доработке скриптов запуска (`run.bat` / `run.sh`), оформлению документации и общей шлифовке проекта.
+- **Claude Code Opus 4.7 Max (Anthropic)** — лидирующая на момент основной разработки нейросеть в области программирования: модель удерживала первые места в индустриальных бенчмарках по решению реальных инженерных задач и применяется ведущими IT-компаниями для автоматизации разработки. Привлекалась к написанию кода, ревью изменений, подготовке тестов и сборке Figma-прототипа.
+- **ChatGPT 5.5 Thinking (OpenAI)** — флагманская reasoning-модель с расширенной цепочкой рассуждений; использовалась для координации процесса, декомпозиции задач на этапы, генерации и доводки промптов для Claude Code и сверки результатов между участниками команды.
+
+Все архитектурные решения и итоговые формулировки принимались авторами проекта; ИИ-ассистенты выступали в роли ускорителей, а не самостоятельных авторов.
+
+Доступ к инструментам был получен на безвозмездной основе нестандартным путём — без оформления подписки и без покупки API-кредитов. Финансовых затрат на использование ИИ-ассистентов проект не нёс.
+<img width="559" height="174" alt="image" src="https://github.com/user-attachments/assets/91dd7228-4149-4263-bfc5-c836f535c50d" />
+
 
 ## 📄 Лицензия
 
-MIT — см. [`LICENSE`](LICENSE).
+[MIT](LICENSE) © 2026 Скуратов Дмитрий, Скуратов Алексей.
