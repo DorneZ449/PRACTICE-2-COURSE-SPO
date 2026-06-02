@@ -61,12 +61,10 @@ def _strength_dto_from_password(password: str) -> StrengthDTO:
 
 def _initial_context(request: Request) -> dict:
     """Default context for the home page on first load (no password yet)."""
-    sample_password = generate_password(length=DEFAULT_LENGTH)
-    strength = check_strength(sample_password)
     return {
         "request": request,
         "version": __version__,
-        "password": sample_password,
+        "password": "",
         "length": DEFAULT_LENGTH,
         "min_length": MIN_LENGTH,
         "max_length": MAX_LENGTH,
@@ -76,7 +74,7 @@ def _initial_context(request: Request) -> dict:
         "use_digits": True,
         "use_symbols": True,
         "summary": type_summary(True, True, True, True),
-        "strength": strength,
+        "strength": check_strength(""),
         "error": None,
     }
 
