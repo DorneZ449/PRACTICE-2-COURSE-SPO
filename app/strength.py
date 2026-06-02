@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import math
 from dataclasses import asdict, dataclass
-from typing import Dict
 
 from .generator import CHARSETS
 
@@ -15,15 +14,15 @@ MAX_SCORE = 7
 class StrengthResult:
     """Result of a password strength assessment."""
 
-    label: str           # Weak | Medium | Strong | Very Strong
-    css_class: str       # weak | medium | strong | very-strong
-    color: str           # hex color used by the UI
-    score: int           # 0..MAX_SCORE
-    percent: int         # 0..100, used for progress bar width
+    label: str  # Weak | Medium | Strong | Very Strong
+    css_class: str  # weak | medium | strong | very-strong
+    color: str  # hex color used by the UI
+    score: int  # 0..MAX_SCORE
+    percent: int  # 0..100, used for progress bar width
     entropy_bits: float  # estimated entropy in bits
-    description: str     # human-readable hint
+    description: str  # human-readable hint
 
-    def to_dict(self) -> Dict[str, object]:
+    def to_dict(self) -> dict[str, object]:
         return asdict(self)
 
 

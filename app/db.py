@@ -4,9 +4,9 @@ from __future__ import annotations
 
 import os
 import sqlite3
+from collections.abc import Iterator
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Dict, Iterator, List, Optional
 
 BASE_DIR = Path(__file__).resolve().parent
 DEFAULT_DB_PATH = BASE_DIR / "passgen.sqlite3"
@@ -54,7 +54,9 @@ def init_db() -> None:
         # Add columns introduced in later versions if the DB pre-existed.
         existing = {row["name"] for row in conn.execute("PRAGMA table_info(password_history)")}
         if "entropy_bits" not in existing:
-            conn.execute("ALTER TABLE password_history ADD COLUMN entropy_bits REAL NOT NULL DEFAULT 0")
+            conn.execute(
+                "ALTER TABLE password_history ADD COLUMN entropy_bits REAL NOT NULL DEFAULT 0"
+            )
 
 
 def save_password(
@@ -97,7 +99,7 @@ def save_password(
         return int(cur.lastrowid or 0)
 
 
-def get_history(limit: int = 50, offset: int = 0) -> List[Dict[str, object]]:
+def get_history(limit: int = 50, offset: int = 0) -> list[dict[str, object]]:
     with get_connection() as conn:
         rows = conn.execute(
             """
@@ -128,6 +130,6 @@ def clear_history() -> int:
         return cur.rowcount
 
 
-def latest() -> Optional[Dict[str, object]]:
+def latest() -> dict[str, object] | None:
     items = get_history(limit=1)
     return items[0] if items else None
