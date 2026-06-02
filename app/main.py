@@ -4,10 +4,9 @@ from __future__ import annotations
 
 from contextlib import asynccontextmanager
 from pathlib import Path
-from typing import Optional
 
-from fastapi import Depends, FastAPI, Form, HTTPException, Request, status
-from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
+from fastapi import FastAPI, Form, HTTPException, Request, status
+from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
@@ -16,6 +15,7 @@ from .generator import (
     DEFAULT_LENGTH,
     MAX_LENGTH,
     MIN_LENGTH,
+    UI_MAX_LENGTH,
     GeneratorError,
     generate_password,
     type_summary,
@@ -61,21 +61,20 @@ def _strength_dto_from_password(password: str) -> StrengthDTO:
 
 def _initial_context(request: Request) -> dict:
     """Default context for the home page on first load (no password yet)."""
-    sample_password = generate_password(length=DEFAULT_LENGTH)
-    strength = check_strength(sample_password)
     return {
         "request": request,
         "version": __version__,
-        "password": sample_password,
+        "password": "",
         "length": DEFAULT_LENGTH,
         "min_length": MIN_LENGTH,
         "max_length": MAX_LENGTH,
+        "ui_max_length": UI_MAX_LENGTH,
         "use_lowercase": True,
         "use_uppercase": True,
         "use_digits": True,
         "use_symbols": True,
         "summary": type_summary(True, True, True, True),
-        "strength": strength,
+        "strength": check_strength(""),
         "error": None,
     }
 
@@ -94,7 +93,7 @@ def api_generate(payload: GenerateRequest) -> GenerateResponse:
             use_symbols=payload.use_symbols,
         )
     except GeneratorError as exc:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc))
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc)) from exc
 
     strength = check_strength(password)
     summary = type_summary(
@@ -104,7 +103,7 @@ def api_generate(payload: GenerateRequest) -> GenerateResponse:
         payload.use_symbols,
     )
 
-    saved_id: Optional[int] = None
+    saved_id: int | None = None
     if payload.save:
         saved_id = db.save_password(
             password=password,
@@ -140,13 +139,21 @@ def api_history(limit: int = 50, offset: int = 0) -> HistoryResponse:
     items = db.get_history(limit=limit, offset=offset)
     return HistoryResponse(
         total=db.history_count(),
-        items=[HistoryItem(**{**i, **{
-            "use_lowercase": bool(i["use_lowercase"]),
-            "use_uppercase": bool(i["use_uppercase"]),
-            "use_digits": bool(i["use_digits"]),
-            "use_symbols": bool(i["use_symbols"]),
-            "entropy_bits": float(i.get("entropy_bits") or 0.0),
-        }}) for i in items],
+        items=[
+            HistoryItem(
+                **{
+                    **i,
+                    **{
+                        "use_lowercase": bool(i["use_lowercase"]),
+                        "use_uppercase": bool(i["use_uppercase"]),
+                        "use_digits": bool(i["use_digits"]),
+                        "use_symbols": bool(i["use_symbols"]),
+                        "entropy_bits": float(i.get("entropy_bits") or 0.0),
+                    },
+                }
+            )
+            for i in items
+        ],
     )
 
 
@@ -181,10 +188,10 @@ def index(request: Request):
 def generate_form(
     request: Request,
     length: int = Form(DEFAULT_LENGTH),
-    lowercase: Optional[str] = Form(None),
-    uppercase: Optional[str] = Form(None),
-    digits: Optional[str] = Form(None),
-    symbols: Optional[str] = Form(None),
+    lowercase: str | None = Form(None),
+    uppercase: str | None = Form(None),
+    digits: str | None = Form(None),
+    symbols: str | None = Form(None),
 ):
     """SSR fallback for users with JS disabled."""
     use_lower = lowercase == "on"
