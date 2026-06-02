@@ -1,5 +1,6 @@
-/* PassGen Pro — UI based on the Figma design kit (figma_plugin/code.js).
- * Design tokens, components and screens kept 1:1 with the kit.
+/* PassGen Pro — UI based on the team Figma file
+ * (https://www.figma.com/design/1FdC5Nv738sPnKGK3JFo9J/PassGen-Pro).
+ * Design tokens, components and screens kept 1:1 with the design kit.
  */
 
 /* =============== Tokens =============== */
@@ -368,9 +369,23 @@ body {
     color: var(--c-success);
     font-size: 12px;
     font-weight: 800;
+    /* hide any child text: the letter is drawn via ::before so we can
+       reliably repaint it in a contrasting color on top of the colored dot. */
+    font-size: 0;
+    line-height: 1;
 }
 
-.strength__dot::first-letter { color: #06140A; }
+.strength__dot::before {
+    content: "i";
+    color: #06140A;      /* dark glyph on top of the colored background */
+    font-size: 12px;
+    font-weight: 800;
+    font-style: normal;
+    line-height: 1;
+}
+
+/* Weak state is red with white background text for contrast. */
+.strength--weak .strength__dot::before { color: #fff; }
 
 .strength__body strong {
     font-size: clamp(18px, 2vw, 22px);
