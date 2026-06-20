@@ -13,6 +13,22 @@
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', path='/img/favicon.svg') }}">
 </head>
 <body class="page page--{% block body_modifier %}home{% endblock %}">
+    <div class="night-sky" aria-hidden="true">
+        <span class="shooting-star"></span>
+        <span class="shooting-star"></span>
+        <span class="shooting-star"></span>
+        <div class="planet" aria-hidden="true">
+            <span class="planet__globe">
+                <span class="planet__surface"></span>
+                <span class="planet__grid"></span>
+                <span class="planet__scan"></span>
+                <span class="planet__shade"></span>
+            </span>
+            <span class="meteor meteor--1"></span>
+            <span class="meteor meteor--2"></span>
+            <span class="meteor meteor--3"></span>
+        </div>
+    </div>
     {% block body %}{% endblock %}
     <div class="toast" id="toast" role="status" aria-live="polite">
         <span class="toast-icon" aria-hidden="true">

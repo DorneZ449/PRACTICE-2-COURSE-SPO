@@ -8,15 +8,18 @@
         <header class="topbar history-topbar">
             <a class="pill pill--surface pill--md" href="/">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
-                BACK
+                <span data-i18n="btn.back">BACK</span>
             </a>
             <div class="history-title">
-                <h1>History</h1>
-                <p>Passwords saved in local SQLite database — {{ count }} record{{ '' if count == 1 else 's' }}</p>
+                <h1 data-i18n="history.title">History</h1>
+                <p><span data-i18n="history.subtitle">Saved passwords</span>: <span class="rec-count">{{ count }}</span></p>
             </div>
+            <div class="history-actions">
+                <button id="langToggle" class="pill pill--ghost lang-toggle" type="button" aria-label="Switch language"></button>
             <form id="clearForm" action="/history/clear" method="post">
-                <button class="pill pill--danger pill--md" type="submit">CLEAR</button>
+                <button class="pill pill--danger pill--md" type="submit"><span data-i18n="btn.clear">CLEAR</span></button>
             </form>
+            </div>
         </header>
 
         {% if items %}
@@ -24,12 +27,12 @@
                 <table class="history-table">
                     <thead>
                         <tr>
-                            <th>Password</th>
-                            <th>Length</th>
-                            <th>Charsets</th>
-                            <th>Strength</th>
-                            <th>Entropy</th>
-                            <th>Date</th>
+                            <th data-i18n="th.password">Password</th>
+                            <th data-i18n="th.length">Length</th>
+                            <th data-i18n="th.charsets">Charsets</th>
+                            <th data-i18n="th.strength">Strength</th>
+                            <th data-i18n="th.entropy">Entropy</th>
+                            <th data-i18n="th.date">Date</th>
                             <th aria-label="Actions"></th>
                         </tr>
                     </thead>
@@ -46,14 +49,14 @@
                                     </button>
                                 </td>
                                 <td>{{ item.length }}</td>
-                                <td class="muted">{{ item.type_summary }}</td>
+                                <td class="muted charset-cell">{{ item.type_summary }}</td>
                                 <td>
                                     {% set cls = item.strength_label|lower|replace(' ', '-') %}
-                                    <span class="badge badge--{{ cls }}">{{ item.strength_label }}</span>
+                                    <span class="badge badge--{{ cls }}" data-strength="{{ cls }}">{{ item.strength_label }}</span>
                                 </td>
-                                <td>{{ '%.1f' % item.entropy_bits }} bits</td>
+                                <td>{{ '%.1f' % item.entropy_bits }} <span data-i18n="unit.bits">bits</span></td>
                                 <td class="muted">{{ item.created_at }}</td>
-                                <td><button class="row-delete" type="button" data-id="{{ item.id }}" aria-label="Delete">×</button></td>
+                                <td><button class="row-delete" type="button" data-id="{{ item.id }}" aria-label="Delete" data-i18n-aria="aria.delete">×</button></td>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -64,12 +67,13 @@
                 <div class="empty__icon">
                     {% include "_lock.html" %}
                 </div>
-                <h2>History is empty</h2>
-                <p>Generate the first password and it will appear on this page.</p>
-                <a class="pill pill--primary pill--xl" href="/">GENERATE PASSWORD</a>
+                <h2 data-i18n="empty.title">History is empty</h2>
+                <p data-i18n="empty.text">Generate the first password and it will appear on this page.</p>
+                <a class="pill pill--primary pill--xl" href="/"><span data-i18n="empty.btn">GENERATE PASSWORD</span></a>
             </section>
         {% endif %}
     </section>
 </main>
+<script src="{{ url_for('static', path='/js/i18n.js') }}"></script>
 <script src="{{ url_for('static', path='/js/history.js') }}"></script>
 {% endblock %}

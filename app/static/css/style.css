@@ -899,3 +899,1093 @@ body {
         transition-duration: 0s !important;
     }
 }
+
+/* =============== Copy success feedback =============== */
+.output__copy.is-copied,
+.copy-cell.is-copied {
+    background: var(--c-success);
+    border-color: var(--c-success);
+    color: #06140A;
+    transition: background 150ms ease, border-color 150ms ease, color 150ms ease;
+}
+
+.output__copy.is-copied svg,
+.copy-cell.is-copied svg {
+    stroke: #06140A;
+}
+
+/* =============== Перенос длинного пароля на новые строки (как в Bitwarden) =============== */
+textarea.output__value {
+    display: block;
+    resize: none;
+    overflow: hidden;
+    white-space: pre-wrap;
+    word-break: break-all;
+    line-height: 1.35;
+    padding: 0;
+    margin: 0;
+}
+
+.output {
+    height: auto;
+    min-height: 92px;
+    padding: 14px 16px;
+    align-items: center;
+}
+
+/* =============== Переключатель языка =============== */
+.lang-toggle {
+    height: 38px;
+    padding: 0 12px;
+    gap: 7px;
+    text-transform: none;
+    letter-spacing: 0.04em;
+}
+
+.lang-toggle .lang-globe {
+    width: 16px;
+    height: 16px;
+    opacity: 0.85;
+}
+
+.lang-toggle .lang-code {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+}
+
+.history-actions {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+/* ============================================================
+   ПРОФЕССИОНАЛЬНЫЕ АНИМАЦИИ
+   Фоновые эффекты + плавные появления + микровзаимодействия.
+   Всё отключается при prefers-reduced-motion (см. выше).
+   ============================================================ */
+
+/* --- Диагональный блик: едва заметный свет плывёт из левого низа в правый верх --- */
+body::before {
+    content: "";
+    position: fixed;
+    inset: -30%;
+    z-index: -1;
+    pointer-events: none;
+    background: linear-gradient(60deg,
+        transparent 32%,
+        rgba(99, 102, 241, 0.05) 44%,
+        rgba(34, 211, 238, 0.10) 50%,
+        rgba(99, 102, 241, 0.05) 56%,
+        transparent 68%);
+    background-size: 220% 220%;
+    mix-blend-mode: screen;
+    animation: ambient-sheen 12s ease-in-out infinite;
+    will-change: background-position;
+}
+
+@keyframes ambient-sheen {
+    0%   { background-position:   0% 100%; }  /* левый низ */
+    50%  { background-position: 100%   0%; }  /* правый верх */
+    100% { background-position:   0% 100%; }  /* обратно — бесшовный цикл */
+}
+
+/* --- Медленно дрейфующие цветные свечения («aurora») --- */
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background:
+        radial-gradient(42% 50% at 12% 88%, rgba(34, 211, 238, 0.10), transparent 70%),
+        radial-gradient(46% 56% at 88% 12%, rgba(79, 43, 230, 0.14), transparent 72%);
+    animation: aurora-drift 22s ease-in-out infinite alternate;
+    will-change: transform, opacity;
+}
+
+@keyframes aurora-drift {
+    0%   { transform: translate3d(-2%, 2%, 0) scale(1);    opacity: 0.75; }
+    100% { transform: translate3d(2%, -2%, 0) scale(1.08); opacity: 1; }
+}
+
+/* --- Плавное появление карточек и секций при загрузке --- */
+@keyframes rise-in {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: none; }
+}
+
+.app-card,
+.history-card {
+    animation: rise-in 620ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+/* Ступенчатое появление внутренних блоков главной страницы */
+.topbar   { animation: rise-in 520ms cubic-bezier(0.22, 0.61, 0.36, 1) 60ms  both; }
+.strength { animation: rise-in 520ms cubic-bezier(0.22, 0.61, 0.36, 1) 200ms both; }
+.settings { animation: rise-in 520ms cubic-bezier(0.22, 0.61, 0.36, 1) 270ms both; }
+.meta     { animation: rise-in 520ms cubic-bezier(0.22, 0.61, 0.36, 1) 340ms both; }
+
+/* Блок вывода пароля: появление + мягкое «дыхание» свечения */
+.output {
+    animation:
+        rise-in 560ms cubic-bezier(0.22, 0.61, 0.36, 1) 130ms both,
+        output-glow 5s ease-in-out 1s infinite;
+}
+
+@keyframes output-glow {
+    0%, 100% { box-shadow: 0 0 26px rgba(14, 165, 233, 0.18); }
+    50%      { box-shadow: 0 0 42px rgba(14, 165, 233, 0.34); }
+}
+
+/* --- Лёгкий дрейф светящихся ореолов внутри карточки --- */
+.app-card::before { animation: orb-float-a 13s ease-in-out infinite alternate; }
+.app-card::after  { animation: orb-float-b 16s ease-in-out infinite alternate; }
+
+@keyframes orb-float-a {
+    0%   { transform: translate(0, 0)      scale(1); }
+    100% { transform: translate(24px, -18px) scale(1.12); }
+}
+
+@keyframes orb-float-b {
+    0%   { transform: translate(0, 0)        scale(1); }
+    100% { transform: translate(-28px, 22px) scale(1.1); }
+}
+
+/* --- Пульсирующее свечение индикатора надёжности (цвет берётся из текущего состояния) --- */
+.strength__dot { animation: dot-glow 3s ease-in-out infinite; }
+
+@keyframes dot-glow {
+    0%, 100% { filter: drop-shadow(0 0 2px); }
+    50%      { filter: drop-shadow(0 0 8px); }
+}
+
+/* --- Блик, пробегающий по главной кнопке при наведении --- */
+.pill--primary {
+    position: relative;
+    overflow: hidden;
+}
+
+.pill--primary > svg,
+.pill--primary > span {
+    position: relative;
+    z-index: 1;
+}
+
+.pill--primary::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background: linear-gradient(120deg,
+        transparent 30%,
+        rgba(255, 255, 255, 0.28) 50%,
+        transparent 70%);
+    transform: translateX(-130%);
+    transition: transform 700ms ease;
+}
+
+.pill--primary:hover::after { transform: translateX(130%); }
+
+/* --- Микро-отклик при успешном копировании (лёгкий «pop») --- */
+.output__copy.is-copied,
+.copy-cell.is-copied { animation: copy-pop 320ms ease; }
+
+@keyframes copy-pop {
+    0%   { transform: scale(0.9); }
+    50%  { transform: scale(1.08); }
+    100% { transform: scale(1); }
+}
+
+/* --- Появление строк истории со ступенчатой задержкой --- */
+.history-table tbody tr {
+    animation: rise-in 460ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+.history-table tbody tr:nth-child(1) { animation-delay: 80ms; }
+.history-table tbody tr:nth-child(2) { animation-delay: 130ms; }
+.history-table tbody tr:nth-child(3) { animation-delay: 180ms; }
+.history-table tbody tr:nth-child(4) { animation-delay: 230ms; }
+.history-table tbody tr:nth-child(5) { animation-delay: 280ms; }
+.history-table tbody tr:nth-child(6) { animation-delay: 330ms; }
+.history-table tbody tr:nth-child(7) { animation-delay: 380ms; }
+.history-table tbody tr:nth-child(n+8) { animation-delay: 420ms; }
+
+/* --- Дополнительные микровзаимодействия --- */
+.option:hover { transform: translateY(-1px); }
+
+.lang-toggle .lang-globe { transition: transform 350ms ease; }
+.lang-toggle:hover .lang-globe { transform: rotate(25deg) scale(1.05); }
+
+/* ============================================================
+   ЭФФЕКТ «HyperOS» — плавно переливающийся градиент.
+   Сдвиг градиента (а не быстрое движение) — остаётся гладким
+   даже на экранах 30–60 Гц. Отключается при prefers-reduced-motion.
+   ============================================================ */
+
+@keyframes hyperos-flow {
+    0%   { background-position:   0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position:   0% 50%; }
+}
+
+/* Переливающийся текст логотипа и заголовков (как название OS в «О телефоне») */
+.brand-text strong,
+.history-title h1,
+.empty h2 {
+    background-image: linear-gradient(100deg,
+        #818CF8 0%,
+        #22D3EE 20%,
+        #A78BFA 42%,
+        #4F2BE6 60%,
+        #22D3EE 80%,
+        #818CF8 100%);
+    background-size: 280% 100%;
+    background-position: 0% 50%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    animation: hyperos-flow 14s ease-in-out infinite;
+}
+
+/* Живой CTA: фон главной кнопки мягко перетекает оттенками */
+#generateBtn {
+    background-image: linear-gradient(110deg,
+        var(--c-accent-deep) 0%,
+        var(--c-accent-bright) 28%,
+        var(--c-info) 50%,
+        var(--c-accent-bright) 72%,
+        var(--c-accent-deep) 100%);
+    background-size: 240% 100%;
+    background-position: 0% 50%;
+    animation: hyperos-flow 16s ease-in-out infinite;
+}
+
+/* ============================================================
+   ДЕТАЛИЗАЦИЯ ФОНА — чтобы пустое пространство не выглядело голым.
+   Слои fixed + z-index:-1 — не влияют на раскладку и не ловят клики.
+   Анимации медленные → гладкие даже на 30–60 Гц. Отключаются при prefers-reduced-motion.
+   ============================================================ */
+
+/* --- Тонкая точечная сетка (tech-текстура), плавно угасающая к краям --- */
+.shell::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1.4px);
+    background-size: 36px 36px;
+    -webkit-mask-image: radial-gradient(circle at 50% 42%, #000 0%, rgba(0, 0, 0, 0.55) 45%, transparent 80%);
+    mask-image: radial-gradient(circle at 50% 42%, #000 0%, rgba(0, 0, 0, 0.55) 45%, transparent 80%);
+    animation: grid-drift 50s linear infinite;
+    will-change: background-position;
+}
+
+@keyframes grid-drift {
+    from { background-position:   0px   0px; }
+    to   { background-position: 36px  72px; }
+}
+
+/* --- Парящие светящиеся частицы — мягко поднимаются вверх --- */
+.shell::after {
+    content: "";
+    position: fixed;
+    inset: -10% 0;
+    z-index: -1;
+    pointer-events: none;
+    background-repeat: no-repeat;
+    background-image:
+        radial-gradient(2px 2px   at 12% 82%, rgba(34, 211, 238, 0.70), transparent 60%),
+        radial-gradient(2px 2px   at 68% 58%, rgba(129, 140, 248, 0.65), transparent 60%),
+        radial-gradient(1.5px 1.5px at 38% 28%, rgba(255, 255, 255, 0.55), transparent 60%),
+        radial-gradient(2px 2px   at 86% 22%, rgba(34, 211, 238, 0.55), transparent 60%),
+        radial-gradient(1.5px 1.5px at 24% 52%, rgba(167, 139, 250, 0.55), transparent 60%),
+        radial-gradient(2.5px 2.5px at 58% 88%, rgba(255, 255, 255, 0.45), transparent 60%),
+        radial-gradient(1.5px 1.5px at 90% 70%, rgba(129, 140, 248, 0.50), transparent 60%),
+        radial-gradient(2px 2px   at 8% 40%, rgba(34, 211, 238, 0.45), transparent 60%);
+    animation: particles-rise 26s ease-in-out infinite alternate;
+    will-change: transform, opacity;
+}
+
+@keyframes particles-rise {
+    from { transform: translateY(0);     opacity: 0.65; }
+    to   { transform: translateY(-26px); opacity: 1; }
+}
+
+/* ============================================================
+   РЕАЛЬНЫЙ КОСМОС — плотное звёздное небо из нескольких слоёв.
+   Сотни звёзд разного размера/яркости, мерцают в разном темпе → глубина.
+   Перекрывает прежние слои. Отключается при reduced-motion.
+   ============================================================ */
+
+.shell::before {
+    -webkit-mask-image: none;
+    mask-image: none;
+    background-repeat: no-repeat;
+    background-size: auto;
+    background-image:
+        radial-gradient(1.6px 1.6px at 32.7% 15.8%, rgba(222,236,255,0.58), transparent 62%),
+        radial-gradient(1.8px 1.8px at 10.2% 58.1%, rgba(255,255,255,0.64), transparent 62%),
+        radial-gradient(1.1px 1.1px at 43.5% 7.8%, rgba(222,236,255,0.73), transparent 62%),
+        radial-gradient(1.6px 1.6px at 13.1% 22.9%, rgba(222,236,255,0.96), transparent 62%),
+        radial-gradient(1.2px 1.2px at 58.4% 5.9%, rgba(255,255,255,0.79), transparent 62%),
+        radial-gradient(1.1px 1.1px at 29.4% 15.1%, rgba(255,246,224,0.68), transparent 62%),
+        radial-gradient(1.6px 1.6px at 18.7% 58.0%, rgba(222,236,255,0.71), transparent 62%),
+        radial-gradient(1.6px 1.6px at 70.8% 56.3%, rgba(222,236,255,0.76), transparent 62%),
+        radial-gradient(1.5px 1.5px at 42.9% 31.8%, rgba(255,255,255,0.74), transparent 62%),
+        radial-gradient(1.7px 1.7px at 25.3% 18.6%, rgba(255,255,255,0.59), transparent 62%),
+        radial-gradient(1.7px 1.7px at 52.5% 86.8%, rgba(255,255,255,0.67), transparent 62%),
+        radial-gradient(1.7px 1.7px at 12.6% 42.0%, rgba(200,225,255,0.62), transparent 62%),
+        radial-gradient(1.1px 1.1px at 42.3% 95.3%, rgba(255,255,255,0.79), transparent 62%),
+        radial-gradient(1.4px 1.4px at 34.3% 35.3%, rgba(255,255,255,0.89), transparent 62%),
+        radial-gradient(1.4px 1.4px at 83.3% 93.6%, rgba(255,255,255,0.84), transparent 62%),
+        radial-gradient(1.5px 1.5px at 72.7% 31.3%, rgba(200,225,255,0.84), transparent 62%),
+        radial-gradient(1.6px 1.6px at 28.9% 38.8%, rgba(200,225,255,0.56), transparent 62%),
+        radial-gradient(1.4px 1.4px at 35.8% 60.9%, rgba(255,255,255,0.64), transparent 62%),
+        radial-gradient(1.4px 1.4px at 13.7% 25.3%, rgba(255,255,255,0.92), transparent 62%),
+        radial-gradient(1.3px 1.3px at 17.3% 40.4%, rgba(200,225,255,0.61), transparent 62%),
+        radial-gradient(1.4px 1.4px at 85.7% 28.3%, rgba(200,225,255,0.7), transparent 62%),
+        radial-gradient(1.2px 1.2px at 94.9% 15.8%, rgba(255,255,255,0.65), transparent 62%),
+        radial-gradient(1.2px 1.2px at 2.2% 82.4%, rgba(255,255,255,0.67), transparent 62%),
+        radial-gradient(1.5px 1.5px at 42.1% 37.2%, rgba(255,246,224,0.96), transparent 62%),
+        radial-gradient(1.6px 1.6px at 85.2% 94.1%, rgba(200,225,255,0.87), transparent 62%),
+        radial-gradient(1.8px 1.8px at 89.2% 77.4%, rgba(200,225,255,0.89), transparent 62%),
+        radial-gradient(1.4px 1.4px at 40.0% 39.6%, rgba(255,255,255,0.72), transparent 62%),
+        radial-gradient(1.1px 1.1px at 7.6% 21.5%, rgba(255,255,255,0.7), transparent 62%),
+        radial-gradient(1.5px 1.5px at 11.0% 56.5%, rgba(222,236,255,0.96), transparent 62%),
+        radial-gradient(1.6px 1.6px at 3.5% 86.7%, rgba(255,255,255,0.61), transparent 62%),
+        radial-gradient(1.4px 1.4px at 94.6% 60.0%, rgba(200,225,255,0.6), transparent 62%),
+        radial-gradient(1.4px 1.4px at 98.3% 46.7%, rgba(255,255,255,0.59), transparent 62%),
+        radial-gradient(1.4px 1.4px at 74.5% 73.6%, rgba(222,236,255,0.85), transparent 62%),
+        radial-gradient(1.5px 1.5px at 3.3% 94.2%, rgba(222,236,255,0.61), transparent 62%),
+        radial-gradient(1.3px 1.3px at 90.6% 75.3%, rgba(255,255,255,0.83), transparent 62%),
+        radial-gradient(1.3px 1.3px at 69.2% 26.6%, rgba(255,255,255,0.62), transparent 62%),
+        radial-gradient(1.3px 1.3px at 53.2% 77.3%, rgba(255,255,255,0.65), transparent 62%),
+        radial-gradient(1.7px 1.7px at 80.0% 81.2%, rgba(222,236,255,0.65), transparent 62%),
+        radial-gradient(1.9px 1.9px at 49.3% 72.6%, rgba(200,225,255,0.89), transparent 62%),
+        radial-gradient(1.9px 1.9px at 26.4% 68.9%, rgba(255,246,224,0.74), transparent 62%),
+        radial-gradient(1.3px 1.3px at 97.8% 94.6%, rgba(255,255,255,0.64), transparent 62%),
+        radial-gradient(1.4px 1.4px at 47.1% 34.1%, rgba(222,236,255,0.97), transparent 62%),
+        radial-gradient(1.6px 1.6px at 83.4% 48.0%, rgba(255,255,255,0.89), transparent 62%),
+        radial-gradient(1.3px 1.3px at 82.8% 12.8%, rgba(255,255,255,0.86), transparent 62%),
+        radial-gradient(1.7px 1.7px at 47.8% 18.5%, rgba(255,246,224,0.69), transparent 62%),
+        radial-gradient(1.9px 1.9px at 39.8% 40.3%, rgba(255,255,255,0.86), transparent 62%),
+        radial-gradient(1.5px 1.5px at 98.3% 3.7%, rgba(255,246,224,0.75), transparent 62%),
+        radial-gradient(1.9px 1.9px at 15.3% 82.0%, rgba(255,255,255,0.83), transparent 62%),
+        radial-gradient(1.0px 1.0px at 16.3% 54.7%, rgba(255,246,224,0.89), transparent 62%),
+        radial-gradient(1.8px 1.8px at 64.7% 52.6%, rgba(255,255,255,0.74), transparent 62%),
+        radial-gradient(1.2px 1.2px at 82.0% 21.7%, rgba(255,255,255,0.68), transparent 62%),
+        radial-gradient(1.5px 1.5px at 75.8% 32.9%, rgba(255,255,255,0.91), transparent 62%),
+        radial-gradient(1.4px 1.4px at 90.2% 35.7%, rgba(222,236,255,0.8), transparent 62%),
+        radial-gradient(1.5px 1.5px at 42.2% 90.9%, rgba(222,236,255,0.78), transparent 62%),
+        radial-gradient(1.7px 1.7px at 51.0% 86.5%, rgba(255,255,255,0.81), transparent 62%),
+        radial-gradient(1.7px 1.7px at 17.9% 47.4%, rgba(255,255,255,0.79), transparent 62%),
+        radial-gradient(1.4px 1.4px at 67.9% 53.0%, rgba(222,236,255,0.88), transparent 62%),
+        radial-gradient(1.0px 1.0px at 6.6% 19.7%, rgba(200,225,255,0.59), transparent 62%),
+        radial-gradient(1.8px 1.8px at 56.0% 75.5%, rgba(222,236,255,0.74), transparent 62%),
+        radial-gradient(1.2px 1.2px at 96.4% 60.4%, rgba(222,236,255,0.67), transparent 62%);
+    animation: star-twinkle 5.5s ease-in-out infinite;
+}
+
+.night-sky::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-repeat: no-repeat;
+    background-size: auto;
+    background-image:
+        radial-gradient(1.7px 1.7px at 53.3% 47.8%, rgba(255,255,255,0.79), transparent 62%),
+        radial-gradient(1.1px 1.1px at 91.4% 88.5%, rgba(200,225,255,0.69), transparent 62%),
+        radial-gradient(1.0px 1.0px at 12.9% 44.3%, rgba(255,255,255,0.6), transparent 62%),
+        radial-gradient(1.0px 1.0px at 21.8% 30.7%, rgba(255,246,224,0.83), transparent 62%),
+        radial-gradient(1.1px 1.1px at 64.1% 36.9%, rgba(200,225,255,0.56), transparent 62%),
+        radial-gradient(1.2px 1.2px at 22.5% 94.3%, rgba(255,246,224,0.7), transparent 62%),
+        radial-gradient(1.2px 1.2px at 82.6% 16.8%, rgba(255,255,255,0.72), transparent 62%),
+        radial-gradient(1.0px 1.0px at 42.3% 35.9%, rgba(255,255,255,0.65), transparent 62%),
+        radial-gradient(0.9px 0.9px at 55.3% 44.2%, rgba(222,236,255,0.64), transparent 62%),
+        radial-gradient(1.0px 1.0px at 30.0% 95.2%, rgba(255,255,255,0.89), transparent 62%),
+        radial-gradient(1.1px 1.1px at 96.2% 11.3%, rgba(255,255,255,0.52), transparent 62%),
+        radial-gradient(1.2px 1.2px at 27.5% 13.7%, rgba(255,255,255,0.88), transparent 62%),
+        radial-gradient(1.3px 1.3px at 40.8% 53.6%, rgba(255,255,255,0.71), transparent 62%),
+        radial-gradient(1.5px 1.5px at 9.8% 6.6%, rgba(255,255,255,0.68), transparent 62%),
+        radial-gradient(1.0px 1.0px at 27.4% 2.6%, rgba(222,236,255,0.61), transparent 62%),
+        radial-gradient(1.6px 1.6px at 84.9% 7.5%, rgba(255,255,255,0.69), transparent 62%),
+        radial-gradient(1.6px 1.6px at 98.4% 41.9%, rgba(255,255,255,0.76), transparent 62%),
+        radial-gradient(1.0px 1.0px at 52.6% 24.4%, rgba(255,255,255,0.57), transparent 62%),
+        radial-gradient(1.4px 1.4px at 18.8% 92.4%, rgba(255,255,255,0.72), transparent 62%),
+        radial-gradient(1.0px 1.0px at 29.4% 50.0%, rgba(255,255,255,0.65), transparent 62%),
+        radial-gradient(0.9px 0.9px at 98.5% 4.6%, rgba(255,255,255,0.71), transparent 62%),
+        radial-gradient(1.3px 1.3px at 51.4% 25.1%, rgba(255,246,224,0.78), transparent 62%),
+        radial-gradient(1.6px 1.6px at 43.4% 49.5%, rgba(222,236,255,0.67), transparent 62%),
+        radial-gradient(1.1px 1.1px at 31.2% 22.1%, rgba(255,246,224,0.58), transparent 62%),
+        radial-gradient(1.7px 1.7px at 72.4% 14.7%, rgba(255,255,255,0.91), transparent 62%),
+        radial-gradient(1.6px 1.6px at 2.4% 62.3%, rgba(255,255,255,0.68), transparent 62%),
+        radial-gradient(1.6px 1.6px at 9.3% 83.4%, rgba(255,255,255,0.78), transparent 62%),
+        radial-gradient(0.9px 0.9px at 59.7% 68.9%, rgba(255,255,255,0.58), transparent 62%),
+        radial-gradient(1.7px 1.7px at 44.7% 26.8%, rgba(222,236,255,0.91), transparent 62%),
+        radial-gradient(1.6px 1.6px at 32.7% 4.4%, rgba(255,255,255,0.59), transparent 62%),
+        radial-gradient(1.3px 1.3px at 1.1% 38.4%, rgba(255,255,255,0.71), transparent 62%),
+        radial-gradient(1.0px 1.0px at 25.3% 77.1%, rgba(255,255,255,0.84), transparent 62%),
+        radial-gradient(0.9px 0.9px at 40.2% 5.1%, rgba(255,255,255,0.63), transparent 62%),
+        radial-gradient(1.6px 1.6px at 9.3% 94.8%, rgba(255,246,224,0.57), transparent 62%),
+        radial-gradient(1.5px 1.5px at 77.8% 59.5%, rgba(200,225,255,0.8), transparent 62%),
+        radial-gradient(1.4px 1.4px at 15.6% 72.0%, rgba(255,246,224,0.52), transparent 62%),
+        radial-gradient(1.5px 1.5px at 88.4% 62.5%, rgba(255,255,255,0.84), transparent 62%),
+        radial-gradient(1.4px 1.4px at 90.2% 74.8%, rgba(255,255,255,0.84), transparent 62%),
+        radial-gradient(1.6px 1.6px at 82.0% 58.2%, rgba(255,246,224,0.79), transparent 62%),
+        radial-gradient(0.9px 0.9px at 64.0% 9.3%, rgba(255,255,255,0.77), transparent 62%),
+        radial-gradient(0.9px 0.9px at 37.9% 45.2%, rgba(222,236,255,0.51), transparent 62%),
+        radial-gradient(0.9px 0.9px at 67.7% 49.0%, rgba(255,246,224,0.84), transparent 62%),
+        radial-gradient(1.0px 1.0px at 92.4% 89.0%, rgba(255,246,224,0.72), transparent 62%),
+        radial-gradient(1.0px 1.0px at 73.2% 25.7%, rgba(255,246,224,0.61), transparent 62%),
+        radial-gradient(1.4px 1.4px at 75.1% 23.6%, rgba(200,225,255,0.69), transparent 62%),
+        radial-gradient(1.1px 1.1px at 8.5% 90.2%, rgba(255,246,224,0.52), transparent 62%),
+        radial-gradient(1.0px 1.0px at 64.0% 8.6%, rgba(255,246,224,0.61), transparent 62%),
+        radial-gradient(1.0px 1.0px at 68.9% 61.9%, rgba(200,225,255,0.7), transparent 62%),
+        radial-gradient(1.5px 1.5px at 27.3% 66.9%, rgba(255,255,255,0.78), transparent 62%),
+        radial-gradient(1.3px 1.3px at 70.5% 29.0%, rgba(222,236,255,0.82), transparent 62%),
+        radial-gradient(1.6px 1.6px at 20.5% 96.9%, rgba(200,225,255,0.51), transparent 62%),
+        radial-gradient(1.7px 1.7px at 8.5% 50.6%, rgba(200,225,255,0.92), transparent 62%),
+        radial-gradient(1.1px 1.1px at 21.6% 93.7%, rgba(255,255,255,0.74), transparent 62%),
+        radial-gradient(1.2px 1.2px at 74.3% 26.7%, rgba(255,246,224,0.75), transparent 62%),
+        radial-gradient(1.5px 1.5px at 50.9% 87.9%, rgba(200,225,255,0.6), transparent 62%),
+        radial-gradient(1.7px 1.7px at 39.6% 16.6%, rgba(200,225,255,0.79), transparent 62%),
+        radial-gradient(1.2px 1.2px at 30.6% 14.8%, rgba(255,255,255,0.63), transparent 62%),
+        radial-gradient(1.6px 1.6px at 1.2% 74.6%, rgba(255,255,255,0.55), transparent 62%),
+        radial-gradient(1.1px 1.1px at 70.9% 89.4%, rgba(200,225,255,0.66), transparent 62%),
+        radial-gradient(1.0px 1.0px at 39.2% 86.3%, rgba(255,255,255,0.89), transparent 62%);
+    animation: star-twinkle 7.5s ease-in-out infinite;
+}
+
+.night-sky::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-repeat: no-repeat;
+    background-size: auto;
+    background-image:
+        radial-gradient(1.5px 1.5px at 84.7% 28.5%, rgba(120,200,255,0.87), transparent 62%),
+        radial-gradient(1.7px 1.7px at 92.7% 25.4%, rgba(34,211,238,0.81), transparent 62%),
+        radial-gradient(2.0px 2.0px at 76.8% 77.9%, rgba(120,200,255,0.63), transparent 62%),
+        radial-gradient(2.1px 2.1px at 40.2% 86.8%, rgba(255,255,255,0.7), transparent 62%),
+        radial-gradient(2.0px 2.0px at 5.8% 72.8%, rgba(120,200,255,0.91), transparent 62%),
+        radial-gradient(2.6px 2.6px at 86.2% 48.6%, rgba(34,211,238,0.83), transparent 62%),
+        radial-gradient(1.8px 1.8px at 47.3% 34.7%, rgba(120,200,255,0.9), transparent 62%),
+        radial-gradient(1.8px 1.8px at 26.5% 65.3%, rgba(167,139,250,0.83), transparent 62%),
+        radial-gradient(1.5px 1.5px at 12.7% 64.0%, rgba(167,139,250,0.81), transparent 62%),
+        radial-gradient(1.8px 1.8px at 54.9% 45.4%, rgba(167,139,250,0.91), transparent 62%),
+        radial-gradient(1.5px 1.5px at 14.7% 19.9%, rgba(255,255,255,0.75), transparent 62%),
+        radial-gradient(2.5px 2.5px at 32.3% 37.1%, rgba(255,255,255,0.7), transparent 62%),
+        radial-gradient(1.9px 1.9px at 74.5% 41.5%, rgba(167,139,250,0.82), transparent 62%),
+        radial-gradient(2.0px 2.0px at 27.5% 74.7%, rgba(129,140,248,0.84), transparent 62%),
+        radial-gradient(2.2px 2.2px at 13.3% 50.3%, rgba(34,211,238,0.95), transparent 62%),
+        radial-gradient(1.9px 1.9px at 10.1% 88.9%, rgba(167,139,250,0.87), transparent 62%),
+        radial-gradient(2.5px 2.5px at 94.5% 84.2%, rgba(255,255,255,0.63), transparent 62%),
+        radial-gradient(2.4px 2.4px at 42.7% 75.8%, rgba(167,139,250,0.99), transparent 62%),
+        radial-gradient(2.6px 2.6px at 1.0% 39.4%, rgba(167,139,250,0.93), transparent 62%),
+        radial-gradient(1.5px 1.5px at 96.3% 25.3%, rgba(255,240,210,0.68), transparent 62%),
+        radial-gradient(2.5px 2.5px at 96.2% 11.7%, rgba(167,139,250,0.89), transparent 62%),
+        radial-gradient(1.4px 1.4px at 9.3% 77.1%, rgba(255,240,210,0.67), transparent 62%),
+        radial-gradient(1.8px 1.8px at 91.2% 64.3%, rgba(129,140,248,0.67), transparent 62%),
+        radial-gradient(2.4px 2.4px at 52.8% 43.9%, rgba(129,140,248,0.66), transparent 62%),
+        radial-gradient(1.9px 1.9px at 52.4% 58.1%, rgba(255,240,210,0.7), transparent 62%),
+        radial-gradient(2.7px 2.7px at 1.1% 53.7%, rgba(129,140,248,0.73), transparent 62%),
+        radial-gradient(2.0px 2.0px at 64.2% 87.6%, rgba(34,211,238,0.71), transparent 62%),
+        radial-gradient(2.2px 2.2px at 3.9% 41.4%, rgba(34,211,238,0.64), transparent 62%),
+        radial-gradient(1.9px 1.9px at 49.8% 67.1%, rgba(120,200,255,0.72), transparent 62%),
+        radial-gradient(2.0px 2.0px at 42.6% 37.3%, rgba(120,200,255,0.88), transparent 62%),
+        radial-gradient(1.7px 1.7px at 42.2% 67.9%, rgba(120,200,255,0.92), transparent 62%),
+        radial-gradient(2.0px 2.0px at 83.8% 7.6%, rgba(34,211,238,0.7), transparent 62%),
+        radial-gradient(2.4px 2.4px at 23.6% 22.7%, rgba(255,240,210,0.73), transparent 62%),
+        radial-gradient(1.7px 1.7px at 49.6% 19.4%, rgba(120,200,255,0.78), transparent 62%),
+        radial-gradient(2.6px 2.6px at 6.5% 59.3%, rgba(255,255,255,0.64), transparent 62%),
+        radial-gradient(1.5px 1.5px at 96.5% 14.9%, rgba(167,139,250,0.64), transparent 62%);
+    animation: star-twinkle 9.5s ease-in-out infinite;
+}
+
+.shell::after {
+    background-image:
+        radial-gradient(2.3px 2.3px at 45.1% 70.8%, rgba(255,255,255,0.73), transparent 62%),
+        radial-gradient(2.2px 2.2px at 92.3% 33.3%, rgba(120,200,255,0.98), transparent 62%),
+        radial-gradient(2.8px 2.8px at 46.8% 31.6%, rgba(129,140,248,0.95), transparent 62%),
+        radial-gradient(2.1px 2.1px at 44.4% 11.7%, rgba(167,139,250,0.72), transparent 62%),
+        radial-gradient(3.1px 3.1px at 94.6% 13.1%, rgba(129,140,248,0.76), transparent 62%),
+        radial-gradient(2.9px 2.9px at 76.3% 31.3%, rgba(120,200,255,0.73), transparent 62%),
+        radial-gradient(3.0px 3.0px at 47.4% 37.5%, rgba(129,140,248,0.76), transparent 62%),
+        radial-gradient(2.7px 2.7px at 73.3% 47.5%, rgba(120,200,255,0.77), transparent 62%),
+        radial-gradient(2.0px 2.0px at 76.1% 5.0%, rgba(255,255,255,0.72), transparent 62%),
+        radial-gradient(3.0px 3.0px at 26.2% 74.2%, rgba(129,140,248,0.8), transparent 62%),
+        radial-gradient(2.0px 2.0px at 33.8% 94.5%, rgba(120,200,255,0.92), transparent 62%),
+        radial-gradient(2.0px 2.0px at 32.0% 28.0%, rgba(120,200,255,0.93), transparent 62%),
+        radial-gradient(2.9px 2.9px at 93.8% 7.4%, rgba(120,200,255,0.73), transparent 62%),
+        radial-gradient(2.4px 2.4px at 94.8% 94.5%, rgba(167,139,250,0.78), transparent 62%),
+        radial-gradient(2.5px 2.5px at 80.9% 14.0%, rgba(120,200,255,0.7), transparent 62%),
+        radial-gradient(2.2px 2.2px at 30.7% 68.8%, rgba(129,140,248,0.77), transparent 62%),
+        radial-gradient(2.7px 2.7px at 46.2% 77.8%, rgba(167,139,250,0.85), transparent 62%),
+        radial-gradient(2.1px 2.1px at 74.8% 25.2%, rgba(255,240,210,0.71), transparent 62%),
+        radial-gradient(2.5px 2.5px at 54.4% 16.7%, rgba(255,255,255,0.73), transparent 62%),
+        radial-gradient(2.1px 2.1px at 27.0% 9.2%, rgba(120,200,255,0.85), transparent 62%),
+        radial-gradient(2.1px 2.1px at 96.3% 18.0%, rgba(120,200,255,0.84), transparent 62%),
+        radial-gradient(2.9px 2.9px at 24.0% 53.8%, rgba(129,140,248,0.93), transparent 62%);
+}
+
+/* --- Падающие звёзды: настоящая комета (яркая голова + хвост по направлению движения) --- */
+.shooting-star {
+    z-index: 2;
+    width: 170px;
+    height: 2px;
+    background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(190,215,255,0.55) 70%, rgba(255,255,255,0.95) 100%);
+    border-radius: 999px;
+    filter: drop-shadow(0 0 6px rgba(170,205,255,0.9));
+    transform: rotate(24deg);
+}
+
+.shooting-star::after {
+    content: "";
+    position: absolute;
+    right: -1px;
+    top: -2px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 0 10px 2px rgba(180,210,255,0.95);
+}
+
+@keyframes shoot {
+    0%   { transform: translate3d(0, 0, 0)         rotate(24deg); opacity: 0; }
+    3%   { opacity: 1; }
+    14%  { opacity: 1; }
+    18%  { transform: translate3d(520px, 232px, 0) rotate(24deg); opacity: 0; }
+    100% { transform: translate3d(520px, 232px, 0) rotate(24deg); opacity: 0; }
+}
+
+/* ============================================================
+   ФИКС БАГОВ + ПЛАНЕТА.
+   Причина багов: у .shooting-star потерялись position/opacity/animation,
+   поэтому яркая «голова» кометы стояла в углу и не двигалась.
+   ============================================================ */
+
+/* Контейнер неба — фоновый слой позади контента */
+.night-sky {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+/* Восстанавливаем позиционирование, невидимость в покое и анимацию комет */
+.shooting-star {
+    position: absolute;
+    opacity: 0;
+    animation: shoot 12s linear infinite;
+}
+
+.shooting-star:nth-child(1) { top: 10%; left: 6%;  animation-duration: 11s; animation-delay: 1s;  }
+.shooting-star:nth-child(2) { top: 18%; left: 52%; animation-duration: 15s; animation-delay: 6s;  }
+.shooting-star:nth-child(3) { top: 5%;  left: 30%; animation-duration: 19s; animation-delay: 11s; }
+
+/* ============================================================
+   ПЛАНЕТА — средняя, слева ближе к верху, будто далеко в космосе.
+   ============================================================ */
+.planet {
+    position: fixed;
+    top: 11%;
+    left: 6.5%;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    z-index: 1;
+    pointer-events: none;
+    background:
+        radial-gradient(circle at 33% 29%,
+            #7e8ce0 0%,
+            #5560bd 32%,
+            #38407f 60%,
+            #20254f 82%,
+            #161937 100%);
+    box-shadow:
+        inset -16px -12px 34px rgba(0,0,0,0.55),
+        inset 12px 9px 26px rgba(170,190,255,0.22),
+        0 0 46px rgba(95,115,225,0.30);
+    opacity: 0.92;
+    animation: planet-float 30s ease-in-out infinite;
+}
+
+/* Мягкая атмосферная дымка вокруг планеты */
+.planet::after {
+    content: "";
+    position: absolute;
+    inset: -10px;
+    border-radius: 50%;
+    background: radial-gradient(circle, transparent 58%, rgba(125,150,255,0.14) 72%, transparent 84%);
+}
+
+@keyframes planet-float {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-12px); }
+}
+
+/* ============================================================
+   ЩИТ ПЛАНЕТЫ = НАДЁЖНОСТЬ ПАРОЛЯ (entropy).
+   Цвет и мощь силового поля зависят от силы пароля; метеориты
+   («хакерские атаки») пробивают слабый щит, сгорают на среднем
+   и отражаются от сильного. Класс задаёт JS (applyPlanetShield).
+   Отключается при prefers-reduced-motion.
+   ============================================================ */
+
+.planet {
+    --shield: 125, 150, 255;       /* нейтральный голубой по умолчанию */
+    --shield-strength: 0.45;       /* 0..1 — мощь поля */
+}
+.planet.shield-weak        { --shield: 239, 68, 68;  --shield-strength: 0.22; } /* красный, тонкий */
+.planet.shield-medium      { --shield: 245, 158, 11; --shield-strength: 0.50; } /* оранжевый, мерцает */
+.planet.shield-strong      { --shield: 34, 197, 94;  --shield-strength: 0.82; } /* зелёный, стабильный */
+.planet.shield-very-strong { --shield: 34, 211, 238; --shield-strength: 1.00; } /* неоново-синий, максимум */
+
+/* Силовое поле вокруг планеты */
+.planet::before {
+    content: "";
+    position: absolute;
+    inset: -13px;
+    border-radius: 50%;
+    border: 1.5px solid rgba(var(--shield), calc(var(--shield-strength) * 0.85));
+    background: radial-gradient(circle, transparent 60%, rgba(var(--shield), calc(var(--shield-strength) * 0.12)) 78%, transparent 90%);
+    box-shadow:
+        0 0 26px rgba(var(--shield), calc(var(--shield-strength) * 0.70)),
+        inset 0 0 20px rgba(var(--shield), calc(var(--shield-strength) * 0.50));
+    opacity: calc(0.40 + var(--shield-strength) * 0.60);
+    transition: border-color 0.7s ease, box-shadow 0.7s ease, background 0.7s ease, opacity 0.7s ease;
+    pointer-events: none;
+}
+
+/* Атмосферная дымка в цвет щита (перекрывает прежнюю) */
+.planet::after {
+    content: "";
+    position: absolute;
+    inset: -10px;
+    border-radius: 50%;
+    background: radial-gradient(circle, transparent 56%, rgba(var(--shield), calc(var(--shield-strength) * 0.16)) 72%, transparent 86%);
+    transition: background 0.7s ease;
+    pointer-events: none;
+}
+
+/* Поведение поля: слабый — нестабильный, средний — мерцает, сильный — стабильный пульс */
+.planet.shield-weak::before   { animation: shield-flicker 2.4s ease-in-out infinite; }
+.planet.shield-medium::before { animation: shield-flicker 1.3s ease-in-out infinite; }
+.planet.shield-strong::before,
+.planet.shield-very-strong::before { animation: shield-pulse 3.6s ease-in-out infinite; }
+
+@keyframes shield-flicker {
+    0%, 100% { opacity: 0.30; }
+    20%      { opacity: 0.55; }
+    45%      { opacity: 0.18; }
+    70%      { opacity: 0.48; }
+    85%      { opacity: 0.26; }
+}
+@keyframes shield-pulse {
+    0%, 100% { transform: scale(1);     }
+    50%      { transform: scale(1.045); }
+}
+
+/* ---------- Метеориты (хакерские атаки) ---------- */
+.meteor {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 64px;
+    height: 2px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,150,90,0.95) 100%);
+    filter: drop-shadow(0 0 4px rgba(255,120,70,0.85));
+    opacity: 0;
+    animation-name: none;            /* по умолчанию метеоров нет (нейтрально / страница истории) */
+    animation-duration: 6s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    pointer-events: none;
+}
+.meteor--1 { animation-duration: 5.5s; animation-delay: 0.4s; }
+.meteor--2 { animation-duration: 7s;   animation-delay: 2.6s; }
+.meteor--3 { animation-duration: 8.5s; animation-delay: 4.5s; }
+
+.planet.shield-weak   .meteor { animation-name: meteor-hit; }
+.planet.shield-medium .meteor { animation-name: meteor-burn; }
+.planet.shield-strong .meteor,
+.planet.shield-very-strong .meteor { animation-name: meteor-deflect; }
+
+/* слабый: метеорит пробивает тонкую атмосферу и бьёт по планете */
+@keyframes meteor-hit {
+    0%   { transform: translate(190px, -160px) rotate(40deg); opacity: 0; }
+    14%  { opacity: 1; }
+    90%  { transform: translate(6px, -4px) rotate(40deg); opacity: 1; }
+    100% { transform: translate(6px, -4px) rotate(40deg); opacity: 0; }
+}
+/* средний: метеорит частично сгорает на подлёте */
+@keyframes meteor-burn {
+    0%   { transform: translate(190px, -160px) rotate(40deg) scale(1); opacity: 0; }
+    14%  { opacity: 1; }
+    55%  { transform: translate(96px, -80px) rotate(40deg) scale(1); opacity: 0.95; }
+    72%  { transform: translate(80px, -67px) rotate(40deg) scale(0.35); opacity: 0; }
+    100% { opacity: 0; }
+}
+/* сильный: метеорит отражается от стабильного поля */
+@keyframes meteor-deflect {
+    0%   { transform: translate(190px, -160px) rotate(40deg); opacity: 0; }
+    14%  { opacity: 1; }
+    46%  { transform: translate(72px, -60px) rotate(40deg); opacity: 1; }
+    62%  { transform: translate(118px, -32px) rotate(-12deg); opacity: 0.8; }
+    100% { transform: translate(210px, 16px) rotate(-12deg); opacity: 0; }
+}
+
+/* ============================================================
+   КИБЕР-СПУТНИКИ НАСТРОЕК (орбита планеты).
+   Каждый спутник = набор символов. Активный — ярко светится,
+   пульсирует ореолом и шлёт лазерный импульс к планете при включении.
+   Галочки остаются основным управлением; JS строит и синхронизирует спутники.
+   ============================================================ */
+
+.planet-orbit {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    transform-origin: center;
+    animation: orbit-spin 60s linear infinite;
+    pointer-events: none;
+    z-index: 3;
+}
+/* Тонкое кольцо орбиты */
+.planet-orbit::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 168px;
+    height: 168px;
+    margin: -84px 0 0 -84px;
+    border-radius: 50%;
+    border: 1px solid rgba(180, 200, 255, 0.08);
+    box-shadow: inset 0 0 18px rgba(120, 150, 255, 0.05);
+}
+.satellite {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 13px;
+    height: 13px;
+    margin: -6.5px 0 0 -6.5px;
+    padding: 0;
+    border: 0;
+    background: none;
+    border-radius: 50%;
+    transform: rotate(var(--a)) translateY(calc(-1 * var(--r)));
+    pointer-events: auto;
+    cursor: pointer;
+}
+.satellite__node {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: radial-gradient(circle at 32% 28%, #ffffff, rgba(var(--sat), 0.95) 45%, rgba(var(--sat), 0.40) 100%);
+    box-shadow: 0 0 7px rgba(var(--sat), 0.55), inset 0 0 3px rgba(255, 255, 255, 0.70);
+    opacity: 0.32;
+    transform: scale(0.85);
+    transition: opacity 0.45s ease, box-shadow 0.45s ease, transform 0.45s ease;
+}
+.satellite.is-active .satellite__node {
+    opacity: 1;
+    transform: scale(1);
+    box-shadow: 0 0 10px rgba(var(--sat), 0.95), 0 0 20px rgba(var(--sat), 0.45), inset 0 0 3px rgba(255, 255, 255, 0.85);
+}
+.satellite__halo {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 24px;
+    height: 24px;
+    margin: -12px 0 0 -12px;
+    border-radius: 50%;
+    border: 1px solid rgba(var(--sat), 0.45);
+    opacity: 0;
+    transition: opacity 0.45s ease;
+    pointer-events: none;
+}
+.satellite.is-active .satellite__halo {
+    opacity: 0.7;
+    animation: sat-halo 2.8s ease-in-out infinite;
+}
+.satellite__laser {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 2px;
+    height: var(--r);
+    margin-left: -1px;
+    transform-origin: top center;
+    background: linear-gradient(180deg, rgba(var(--sat), 0.85) 0%, rgba(var(--sat), 0.12) 70%, rgba(var(--sat), 0) 100%);
+    border-radius: 2px;
+    opacity: 0;
+    transition: opacity 0.45s ease;
+    pointer-events: none;
+}
+.satellite.is-active .satellite__laser { opacity: 0.4; }
+/* Импульс-пакет, летящий к планете при включении */
+.satellite__laser::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 5px;
+    height: 5px;
+    margin-left: -2.5px;
+    border-radius: 50%;
+    background: #ffffff;
+    box-shadow: 0 0 9px rgba(var(--sat), 1);
+    opacity: 0;
+}
+.satellite.fire .satellite__laser { opacity: 0.85; }
+.satellite.fire .satellite__laser::after { animation: laser-packet 0.7s ease-in; }
+
+@keyframes orbit-spin { to { transform: rotate(360deg); } }
+@keyframes sat-halo {
+    0%, 100% { transform: scale(1);   opacity: 0.60; }
+    50%      { transform: scale(1.4); opacity: 0.12; }
+}
+@keyframes laser-packet {
+    0%   { top: 0;    opacity: 1; }
+    85%  { opacity: 1; }
+    100% { top: 100%; opacity: 0; }
+}
+
+/* ============================================================
+   ПЛАНЕТА ЗЕМЛЯ + ХАКЕРСКАЯ СЕТКА.
+   Глобус с океанами и континентами, поверх — неоновая сетка
+   (меридианы + параллели) и радар-сканер. Силовое поле (::before/
+   ::after) и спутники остаются сверху. Слои внутри глобуса обрезаются
+   по кругу (overflow:hidden), поэтому метеориты/орбита — на самой планете.
+   Анимации отключаются при prefers-reduced-motion.
+   ============================================================ */
+
+.planet { background: none; box-shadow: none; }
+.planet::before { z-index: 0; }
+.planet::after  { z-index: 0; }
+.meteor { z-index: 2; }
+
+.planet__globe {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    overflow: hidden;
+    z-index: 1;
+    background: radial-gradient(circle at 32% 28%, #1d4e86 0%, #143a6b 38%, #0c2550 68%, #06152f 100%);
+    box-shadow:
+        inset -14px -12px 30px rgba(0, 0, 0, 0.65),
+        inset 8px 6px 20px rgba(130, 180, 255, 0.28),
+        inset 0 0 14px rgba(90, 150, 255, 0.30);
+}
+
+/* Континенты (светящиеся, медленно вращаются) */
+.planet__surface {
+    position: absolute;
+    inset: 0;
+    background-repeat: repeat-x;
+    background-position: 0 50%;
+    background-size: 200% 100%;
+    background-image:
+        radial-gradient(ellipse 13% 16% at 16% 42%, rgba(70, 180, 110, 0.95) 0%, rgba(70, 180, 110, 0) 70%),
+        radial-gradient(ellipse 9% 13% at 30% 64%, rgba(86, 196, 120, 0.90) 0%, rgba(86, 196, 120, 0) 70%),
+        radial-gradient(ellipse 15% 11% at 52% 33%, rgba(74, 186, 112, 0.90) 0%, rgba(74, 186, 112, 0) 72%),
+        radial-gradient(ellipse 8% 14% at 66% 58%, rgba(96, 206, 128, 0.88) 0%, rgba(96, 206, 128, 0) 72%),
+        radial-gradient(ellipse 12% 10% at 82% 40%, rgba(72, 180, 108, 0.90) 0%, rgba(72, 180, 108, 0) 72%),
+        radial-gradient(ellipse 7% 12% at 92% 66%, rgba(90, 200, 124, 0.85) 0%, rgba(90, 200, 124, 0) 72%);
+    mix-blend-mode: screen;
+    opacity: 0.92;
+    filter: drop-shadow(0 0 2px rgba(60, 200, 130, 0.5));
+    animation: globe-rotate 34s linear infinite;
+}
+
+/* Хакерская сетка: меридианы бегут (вращение), параллели статичны */
+.planet__grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+        repeating-linear-gradient(90deg, rgba(80, 255, 190, 0.16) 0 1px, transparent 1px 15px),
+        repeating-linear-gradient(0deg, rgba(80, 255, 190, 0.11) 0 1px, transparent 1px 15px);
+    background-size: 200% 100%, 100% 100%;
+    background-position: 0 0, 0 0;
+    mix-blend-mode: screen;
+    opacity: 0.50;
+    animation: grid-rotate 34s linear infinite;
+}
+
+/* Радар-сканер */
+.planet__scan {
+    position: absolute;
+    inset: 0;
+    background: conic-gradient(from 0deg, transparent 0deg, rgba(90, 255, 200, 0.13) 26deg, transparent 60deg);
+    mix-blend-mode: screen;
+    opacity: 0.55;
+    animation: globe-scan 7s linear infinite;
+}
+
+/* Тень-терминатор (день/ночь) для объёма */
+.planet__shade {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: linear-gradient(118deg, rgba(0, 0, 8, 0) 42%, rgba(2, 6, 20, 0.50) 74%, rgba(0, 2, 12, 0.66) 100%);
+    pointer-events: none;
+}
+
+@keyframes globe-rotate {
+    from { background-position: 0 50%; }
+    to   { background-position: 200% 50%; }
+}
+@keyframes grid-rotate {
+    from { background-position: 0 0, 0 0; }
+    to   { background-position: 200% 0, 0 0; }
+}
+@keyframes globe-scan {
+    to { transform: rotate(360deg); }
+}
+
+/* ============================================================
+   ПАДАЮЩИЕ ЗВЁЗДЫ — перенастройка.
+   Несколько белых комет появляются РЕДКО и в РАЗНЫХ углах:
+   одна из левого угла летит вправо, другая из правого — влево.
+   Длинные длительности и разные задержки = пролетают нечасто.
+   ============================================================ */
+
+.shooting-star { animation-name: shoot-right; }
+
+/* Левый верхний угол — летит вправо-вниз */
+.shooting-star:nth-child(1) {
+    top: 7%; left: 4%; right: auto;
+    animation-name: shoot-right;
+    animation-duration: 17s; animation-delay: 2s;
+}
+/* Правый верхний угол — летит влево-вниз */
+.shooting-star:nth-child(2) {
+    top: 11%; left: auto; right: 5%;
+    animation-name: shoot-left;
+    animation-duration: 22s; animation-delay: 12s;
+}
+/* Слева повыше, реже всех — летит вправо-вниз */
+.shooting-star:nth-child(3) {
+    top: 4%; left: 22%; right: auto;
+    animation-name: shoot-right;
+    animation-duration: 28s; animation-delay: 20s;
+}
+
+@keyframes shoot-right {
+    0%   { transform: translate3d(0, 0, 0)          rotate(24deg); opacity: 0; }
+    4%   { opacity: 1; }
+    13%  { opacity: 1; }
+    17%  { transform: translate3d(360px, 150px, 0)  rotate(24deg); opacity: 0; }
+    100% { transform: translate3d(360px, 150px, 0)  rotate(24deg); opacity: 0; }
+}
+@keyframes shoot-left {
+    0%   { transform: translate3d(0, 0, 0)          rotate(-24deg); opacity: 0; }
+    4%   { opacity: 1; }
+    13%  { opacity: 1; }
+    17%  { transform: translate3d(-360px, 150px, 0) rotate(-24deg); opacity: 0; }
+    100% { transform: translate3d(-360px, 150px, 0) rotate(-24deg); opacity: 0; }
+}
+
+/* ============================================================
+   МЕТЕОРИТЫ-АТАКИ — «врезаются в щит / бьют по планете».
+   Снаряд с хвостом летит из-за кадра к планете. Если щит есть
+   (medium/strong/very-strong) — взрывается НА щите (радиус ~74px,
+   цвет щита). Если щита по сути нет (weak) — долетает до планеты
+   (радиус ~50px) и бьёт по ней оранжевой вспышкой. Геометрия — в
+   переменных, поэтому работает одна общая анимация meteor-strike.
+   ============================================================ */
+
+.meteor {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    margin: -2.5px 0 0 -2.5px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #ffffff 0%, rgba(255,190,140,0.95) 42%, rgba(255,150,90,0) 75%);
+    filter: drop-shadow(0 0 4px rgba(var(--mburst), 0.85));
+    opacity: 0;
+    z-index: 2;
+    pointer-events: none;
+    animation-name: none;            /* по умолчанию атак нет (нейтрально / страница истории) */
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    --ms-x: 0px; --ms-y: 0px;        /* старт (за кадром) */
+    --me-x: 0px; --me-y: 0px;        /* точка удара */
+    --mr: 0deg;                      /* направление полёта */
+    --mburst: 255, 150, 90;          /* цвет вспышки удара */
+}
+/* Хвост снаряда (тянется назад по направлению полёта) */
+.meteor::before {
+    content: "";
+    position: absolute;
+    right: 50%;
+    top: 50%;
+    width: 30px;
+    height: 2px;
+    margin-top: -1px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, rgba(var(--mburst), 0) 0%, rgba(var(--mburst), 0.85) 100%);
+    transform-origin: right center;
+    filter: drop-shadow(0 0 3px rgba(var(--mburst), 0.7));
+}
+
+/* Направление, старт и тайминг каждого метеорита (3 разные стороны) */
+.meteor--1 { --ms-x: 121px;  --ms-y: -105px; --mr: 139deg; animation-duration: 5.5s; animation-delay: 0.4s; }
+.meteor--2 { --ms-x: -125px; --ms-y: -100px; --mr: 39deg;  animation-duration: 7s;   animation-delay: 2.6s; }
+.meteor--3 { --ms-x: 126px;  --ms-y: 99px;   --mr: 218deg; animation-duration: 8.5s; animation-delay: 4.5s; }
+
+/* Включаем атаки при любом активном щите */
+.planet.shield-weak .meteor,
+.planet.shield-medium .meteor,
+.planet.shield-strong .meteor,
+.planet.shield-very-strong .meteor { animation-name: meteor-strike; }
+
+/* Щита по сути нет (weak): долетают до планеты, оранжевая вспышка */
+.planet.shield-weak .meteor { --mburst: 255, 150, 90; }
+.planet.shield-weak .meteor--1 { --me-x: 37.9px;  --me-y: -32.8px; }
+.planet.shield-weak .meteor--2 { --me-x: -39px;   --me-y: -31.3px; }
+.planet.shield-weak .meteor--3 { --me-x: 39.4px;  --me-y: 30.9px; }
+
+/* Щит есть: взрыв НА щите, цвет щита */
+.planet.shield-medium .meteor,
+.planet.shield-strong .meteor,
+.planet.shield-very-strong .meteor { --mburst: var(--shield); }
+.planet.shield-medium .meteor--1,
+.planet.shield-strong .meteor--1,
+.planet.shield-very-strong .meteor--1 { --me-x: 56px;    --me-y: -48.5px; }
+.planet.shield-medium .meteor--2,
+.planet.shield-strong .meteor--2,
+.planet.shield-very-strong .meteor--2 { --me-x: -57.7px; --me-y: -46.2px; }
+.planet.shield-medium .meteor--3,
+.planet.shield-strong .meteor--3,
+.planet.shield-very-strong .meteor--3 { --me-x: 58.2px;  --me-y: 45.7px; }
+
+/* Полёт + удар: летит к точке --me, на удар вспышка (box-shadow растёт), затем гаснет */
+@keyframes meteor-strike {
+    0%   { transform: translate(var(--ms-x), var(--ms-y)) rotate(var(--mr)) scale(0.7); opacity: 0; box-shadow: 0 0 3px rgba(var(--mburst), 0.6); }
+    12%  { opacity: 1; }
+    58%  { transform: translate(var(--me-x), var(--me-y)) rotate(var(--mr)) scale(1);   opacity: 1; box-shadow: 0 0 6px rgba(var(--mburst), 0.9); }
+    66%  { transform: translate(var(--me-x), var(--me-y)) rotate(var(--mr)) scale(1.9); opacity: 1; box-shadow: 0 0 14px 3px rgba(var(--mburst), 0.95); }
+    80%  { transform: translate(var(--me-x), var(--me-y)) rotate(var(--mr)) scale(0.2); opacity: 0; box-shadow: 0 0 2px rgba(var(--mburst), 0); }
+    100% { opacity: 0; }
+}

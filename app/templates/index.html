@@ -15,10 +15,11 @@
                 </span>
             </a>
             <nav class="top-actions" aria-label="Top actions">
+                <button id="langToggle" class="pill pill--ghost lang-toggle" type="button" aria-label="Switch language"></button>
                 <a class="pill pill--ghost" href="/docs" target="_blank" rel="noreferrer noopener">API</a>
                 <a class="pill pill--surface" href="/history">
                     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5a7 7 0 1 1-6.32 4H3l3.2-3.2L9.4 9H7.76A5 5 0 1 0 12 7v5l4 2"/></svg>
-                    History
+                    <span data-i18n="nav.history">History</span>
                 </a>
             </nav>
         </header>
@@ -28,7 +29,7 @@
         {% endif %}
 
         <section class="output" aria-label="Generated password">
-            <input id="password" class="output__value" value="{{ password }}" readonly spellcheck="false" aria-label="Generated password">
+            <textarea id="password" class="output__value" rows="1" readonly spellcheck="false" aria-label="Generated password">{{ password }}</textarea>
             <button id="copyBtn" class="output__copy" type="button" aria-label="Copy password">
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                     <rect x="9" y="3" width="12" height="14" rx="2"/>
@@ -46,8 +47,8 @@
                 <p id="strengthDesc">{{ strength.description }}</p>
                 <div class="strength__bar"><span id="strengthFill" style="width: {{ strength.percent }}%"></span></div>
                 <small class="strength__meta">
-                    Score <b id="strengthScore">{{ strength.score }}</b>/7
-                    · Entropy <b id="strengthEntropy">{{ '%.1f' % strength.entropy_bits }}</b> bits
+                    <span data-i18n="meta.score">Score</span> <b id="strengthScore">{{ strength.score }}</b>/7
+                    · <span data-i18n="meta.entropy">Entropy</span> <b id="strengthEntropy">{{ '%.1f' % strength.entropy_bits }}</b> <span data-i18n="unit.bits">bits</span>
                 </small>
             </div>
         </section>
@@ -55,12 +56,12 @@
         <form id="genForm" class="settings">
             <div class="length-card">
                 <div class="length-head">
-                    <label for="lengthRange">Password length
+                    <label for="lengthRange"><span data-i18n="field.length">Password length</span>
                         <span id="lengthBadge" class="length-badge">{{ length }}</span>
                     </label>
                     <button id="resetBtn" class="pill pill--primary pill--md" type="button">
                         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 7h9a5 5 0 1 1-4.2 7.7M6 7V3M6 7H2"/></svg>
-                        RESET
+                        <span data-i18n="btn.reset">RESET</span>
                     </button>
                 </div>
                 <input id="lengthRange" class="range" type="range" name="length"
@@ -76,57 +77,58 @@
                     <label class="option">
                         <input type="checkbox" name="uppercase" data-key="upper" {% if use_uppercase %}checked{% endif %}>
                         <span class="option__check" aria-hidden="true"></span>
-                        <span class="option__label">Uppercase <em>(A–Z)</em></span>
+                        <span class="option__label"><span data-i18n="opt.uppercase">Uppercase</span> <em>(A–Z)</em></span>
                     </label>
                 </li>
                 <li>
                     <label class="option">
                         <input type="checkbox" name="lowercase" data-key="lower" {% if use_lowercase %}checked{% endif %}>
                         <span class="option__check" aria-hidden="true"></span>
-                        <span class="option__label">Lowercase <em>(a–z)</em></span>
+                        <span class="option__label"><span data-i18n="opt.lowercase">Lowercase</span> <em>(a–z)</em></span>
                     </label>
                 </li>
                 <li>
                     <label class="option">
                         <input type="checkbox" name="digits" data-key="digits" {% if use_digits %}checked{% endif %}>
                         <span class="option__check" aria-hidden="true"></span>
-                        <span class="option__label">Numbers <em>(0–9)</em></span>
+                        <span class="option__label"><span data-i18n="opt.numbers">Numbers</span> <em>(0–9)</em></span>
                     </label>
                 </li>
                 <li>
                     <label class="option">
                         <input type="checkbox" name="symbols" data-key="symbols" {% if use_symbols %}checked{% endif %}>
                         <span class="option__check" aria-hidden="true"></span>
-                        <span class="option__label">Symbols <em>(! @ # $ %)</em></span>
+                        <span class="option__label"><span data-i18n="opt.symbols">Symbols</span> <em>(! @ # $ %)</em></span>
                     </label>
                 </li>
             </ul>
 
             <button id="generateBtn" class="pill pill--primary pill--xl" type="submit">
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17 1l3 3-3 3M4 11a7 7 0 0 1 7-7h9M7 23l-3-3 3-3M20 13a7 7 0 0 1-7 7H4"/></svg>
-                GENERATE PASSWORD
+                <span data-i18n="btn.generate">GENERATE PASSWORD</span>
             </button>
         </form>
 
         <section class="meta" aria-label="Generated password details">
             <article class="meta__card">
-                <span>Length</span>
+                <span data-i18n="meta.length">Length</span>
                 <strong id="metaLength">{{ length }}</strong>
             </article>
             <article class="meta__card">
-                <span>Charsets</span>
+                <span data-i18n="meta.charsets">Charsets</span>
                 <strong id="metaTypes">{{ summary }}</strong>
             </article>
             <article class="meta__card">
-                <span>Score</span>
+                <span data-i18n="meta.score">Score</span>
                 <strong id="metaScore">{{ strength.score }} / 7</strong>
             </article>
             <article class="meta__card">
-                <span>Entropy</span>
-                <strong id="metaEntropy">{{ '%.1f' % strength.entropy_bits }} bits</strong>
+                <span data-i18n="meta.entropy">Entropy</span>
+                <strong id="metaEntropy">{{ '%.1f' % strength.entropy_bits }} <span data-i18n="unit.bits">bits</span></strong>
             </article>
         </section>
     </section>
 </main>
+<script src="{{ url_for('static', path='/js/i18n.js') }}"></script>
 <script src="{{ url_for('static', path='/js/app.js') }}"></script>
 {% endblock %}

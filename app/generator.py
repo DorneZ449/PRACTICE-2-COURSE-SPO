@@ -14,8 +14,8 @@ CHARSETS: dict[str, str] = {
 }
 
 MIN_LENGTH = 6
-MAX_LENGTH = 64  # hard upper bound accepted by the REST API
-UI_MAX_LENGTH = 32  # slider upper bound in the web UI (per the spec)
+MAX_LENGTH = 128  # hard upper bound accepted by the REST API
+UI_MAX_LENGTH = 128  # slider upper bound in the web UI
 DEFAULT_LENGTH = 16
 
 
